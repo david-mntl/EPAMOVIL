@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.epatec.epatecmovil">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:replace="android:icon">
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/title_activity_login" />
+        <activity
+            android:name=".ShopActivity"
+            android:label="@string/title_activity_shop" />
+        <activity
+            android:name=".CheckoutActivity"
+            android:label="@string/title_activity_checkout" />
+        <activity
+            android:name=".RegisterActivities.RegisterCustomer"
+            android:label="Registrar Usuario" />
+        <activity
+            android:name=".customer_module"
+            android:label="@string/title_activity_customer_module" />
+        <activity
+            android:name=".EditActivities.EditCustomer"
+            android:label="@string/title_activity_edit_customer" />
+        <activity
+            android:name=".supplier_module"
+            android:label="@string/title_activity_supplier_module" />
+        <activity
+            android:name=".RegisterActivities.RegisterProduct"
+            android:label="@string/title_activity_register_product" />
+        <activity
+            android:name=".EditActivities.EditProduct"
+            android:label="@string/title_activity_edit_product" />
+        <activity
+            android:name=".configActivity"
+            android:label="@string/title_activity_config" />
+        <activity
+            android:name=".logic.databaseActivity"
+            android:label="@string/title_activity_database" />
+        <activity
+            android:name=".RegisterActivities.RegisterSupplier"
+            android:label="@string/title_activity_register_supplier" />
+        <activity
+            android:name=".EditActivities.EditSupplier"
+            android:label="@string/title_activity_edit_supplier" />
+        <activity
+            android:name=".RegisterActivities.RegisterCategory"
+            android:label="@string/title_activity_register_category" />
+        <activity
+            android:name=".EditActivities.EditCategory"
+            android:label="@string/title_activity_edit_category" />
+        <activity
+            android:name=".EditActivities.EditSeller"
+            android:label="@string/title_activity_edit_seller" />
+
+        <receiver
+            android:name=".dataAccess.SyncroAlarm"
+            android:process=":remote"></receiver>
+
+        <service
+            android:enabled="true"
+            android:name=".dataAccess.SyncroService"
+            android:exported="false">
+        </service>
+    </application>
+
+</manifest>
