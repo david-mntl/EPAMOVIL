@@ -1,0 +1,32 @@
+SQLite user = new SQLite(RegisterCustomer.this, "DBClientes", null, 1);
+SQLiteDatabase dbRead = user.getReadableDatabase();
+
+Cursor c = dbRead.rawQuery("SELECT * FROM Cliente", null);
+
+//Nos aseguramos de que existe al menos un registro
+if (c.moveToFirst()) {
+    //Recorremos el cursor hasta que no haya más registros
+    do {
+        String codigo= c.getString(0);
+        String nombre = c.getString(1);
+        Log.i("CODIGO ",codigo );
+        Log.i("NOMBRE ",nombre);
+    } while(c.moveToNext());
+}
+
+
+
+
+
+
+new SweetAlertDialog(RegisterCustomer.this, SweetAlertDialog.WARNING_TYPE)
+    .setTitleText("Oops")
+    .setContentText("El nombre de usuario o ID ya existe")
+    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+        @Override
+        public void onClick(SweetAlertDialog sDialog) {
+            sDialog.dismissWithAnimation();
+            RegisterCustomer.this.finish();
+        }
+    })
+    .show();

@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">EpatecMovil</string>
+
+    <string name="title_section1">Inicio</string>
+    <string name="title_section2">Productos</string>
+    <string name="title_section3">Ingresar</string>
+    <string name="title_section4">Módulo Clientes</string>
+    <string name="title_section5">Módulo Proveedores</string>
+    <string name="title_section6">Módulo Vendedor</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="webservice_url">http://cewebserver.azurewebsites.net/</string>
+
+    <string name="action_example">Example action</string>
+    <string name="action_settings"></string>
+    <string name="title_activity_login">Ingresar</string>
+    <string name="title_activity_shop">ShopActivity</string>
+    <string name="title_activity_checkout">CheckoutActivity</string>
+    <string name="title_activity_register_customer">Registrar Cliente</string>
+    <string name="title_activity_customer_module">Módulo Clientes</string>
+    <string name="title_activity_edit_customer">Editar Cliente</string>
+    <string name="title_activity_supplier_module">Módulo Proveedores</string>
+    <string name="title_activity_register_product">Registrar Producto</string>
+    <string name="title_activity_edit_product">Editar Producto</string>
+    <string name="title_activity_config"></string>
+    <string name="title_activity_database">Base de Datos</string>
+    <string name="title_activity_register_supplier">RegisterSupplier</string>
+    <string name="title_activity_edit_supplier">EditSupplier</string>
+    <string name="title_activity_register_category">RegisterCategory</string>
+    <string name="title_activity_edit_category">EditCategory</string>
+    <string name="title_activity_edit_seller">EditSeller</string>
+</resources>
