@@ -7,6 +7,7 @@
     <string name="title_section4">Módulo Clientes</string>
     <string name="title_section5">Módulo Proveedores</string>
     <string name="title_section6">Módulo Vendedor</string>
+    <string name="title_section7">Reportes</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -31,4 +32,5 @@
     <string name="title_activity_register_category">RegisterCategory</string>
     <string name="title_activity_edit_category">EditCategory</string>
     <string name="title_activity_edit_seller">EditSeller</string>
+    <string name="title_activity_reports">Reporte Ventas</string>
 </resources>

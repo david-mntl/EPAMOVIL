@@ -20,6 +20,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.epatec.epatecmovil.EditActivities.EditSeller;
+import com.epatec.epatecmovil.dataAccess.ReportsActivity;
 import com.epatec.epatecmovil.dataAccess.SyncroAlarm;
 import com.epatec.epatecmovil.dataAccess.SyncroService;
 import com.epatec.epatecmovil.dataAccess.SyncroServiceOld;
@@ -191,6 +192,11 @@ public class MainActivity extends ActionBarActivity
                 mTitle = getString(R.string.title_section6);
                 Intent sellerIntent = new Intent(MainActivity.this, EditSeller.class);
                 startActivity(sellerIntent);
+                break;
+            case 7:
+                mTitle = getString(R.string.title_section7);
+                Intent reportsIntent = new Intent(MainActivity.this, ReportsActivity.class);
+                startActivity(reportsIntent);
                 break;
         }
     }

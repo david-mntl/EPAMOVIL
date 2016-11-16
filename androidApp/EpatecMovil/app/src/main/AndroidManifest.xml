@@ -73,13 +73,16 @@
 
         <receiver
             android:name=".dataAccess.SyncroAlarm"
-            android:process=":remote"></receiver>
+            android:process=":remote" />
 
         <service
-            android:enabled="true"
             android:name=".dataAccess.SyncroService"
-            android:exported="false">
-        </service>
+            android:enabled="true"
+            android:exported="false"></service>
+
+        <activity
+            android:name=".dataAccess.ReportsActivity"
+            android:label="@string/title_activity_reports"></activity>
     </application>
 
 </manifest>
