@@ -1,0 +1,6 @@
+SELECT name, recovery_model_desc FROM sys.databases WHERE name = 'DBCore'
+
+USE [master]
+GO
+ALTER DATABASE DBCore SET RECOVERY FULL WITH NO_WAIT
+GO
