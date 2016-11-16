@@ -5,13 +5,15 @@ package com.epatec.epatecmovil;
  */
 public class Producto{
     int _ProductID;
-    int _Quantity;
+    int _Stock;
     int _Price;
     String _Name;
-    public Producto(int id, int quantity,int price,String name){
+    String _Details;
+    public Producto(int id, int stock,int price,String name,String details){
         _ProductID = id;
-        _Quantity = quantity;
+        _Stock = stock;
         _Price = price;
         _Name = name;
+        _Details = details;
     }
 }

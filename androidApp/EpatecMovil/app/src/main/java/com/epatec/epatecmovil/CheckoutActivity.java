@@ -1,39 +1,29 @@
 package com.epatec.epatecmovil;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Space;
+import android.widget.Spinner;
 import android.widget.TextView;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.epatec.epatecmovil.RegisterActivities.RegisterCustomer;
+import com.epatec.epatecmovil.dataAccess.SQLite;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -44,11 +34,26 @@ public class CheckoutActivity extends ActionBarActivity {
 
     String[] sucursales = new String[]{"San Jose", "Alajuela", "Cartago", "Heredia", "Guanacaste","Puntarenas","Limon"};
     String currentSucursal = "San Jose";
+    String customerID = "0";
+    boolean resumeShop = false;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(resumeShop) {
+            super.onBackPressed();
+            resumeShop=false;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkout);
+
+        final Spinner dropdownSupplier = (Spinner)findViewById(R.id.sucursalesSpinner);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, sucursales);
+        dropdownSupplier.setAdapter(adapter);
 
         buildShopEntity();
     }
@@ -69,11 +74,61 @@ public class CheckoutActivity extends ActionBarActivity {
         buybutton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 UserDataHolder holder = UserDataHolder.getInstance();
-                if(holder.user != ""){
-                    connector = new AsyncTaskConnector();
-                    connector.execute("init");
-                }
-                else{
+                if (holder.user != "") { //TODO /*EL LOGIN DEL VENDEDOR ESTA ALAMBRADO POR FALTA DE POBLACION DE LA DB*/
+                    final EditText input = new EditText(CheckoutActivity.this);
+                    input.setInputType(InputType.TYPE_CLASS_TEXT);
+
+                    AlertDialog alertDialog = new AlertDialog.Builder(CheckoutActivity.this).create();
+                    alertDialog.setTitle("Información Requerida");
+                    alertDialog.setMessage("Ingrese la cédula del cliente");
+                    alertDialog.setView(input, 10, 0, 10, 0); // 10 spacing, left and right
+                    alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            customerID = input.getText().toString();
+
+                            SQLite user = new SQLite(CheckoutActivity.this, "DBClientes", null, 1);
+                            SQLiteDatabase dbRead = user.getReadableDatabase();
+
+                            /******************** Get Product Info Query ********************/
+                            Cursor c1 = dbRead.rawQuery("SELECT * FROM Customer WHERE CUSTOMER_ID=" + "\'" + customerID + "\'", null);
+
+                            //Nos aseguramos de que existe el cliente
+                            if (c1.moveToFirst()) {
+                                new SweetAlertDialog(CheckoutActivity.this, SweetAlertDialog.WARNING_TYPE)
+                                        .setTitleText(c1.getString(1) + " " + c1.getString(2) + " " + c1.getString(3))
+                                        .setContentText("¿La información es correcta?")
+                                        .setCancelText("Cancelar")
+                                        .setConfirmText("Aceptar")
+                                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sDialog) {
+                                                sDialog.dismissWithAnimation();
+                                                connector = new AsyncTaskConnector();
+                                                connector.execute("init");
+                                            }
+                                        })
+                                        .show();
+                            } else {
+                                new SweetAlertDialog(CheckoutActivity.this, SweetAlertDialog.WARNING_TYPE)
+                                        .setTitleText("¡El cliente no existe!")
+                                        .setContentText("¿Desea agregar nuevo cliente?")
+                                        .setCancelText("Cancelar")
+                                        .setConfirmText("Aceptar")
+                                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sDialog) {
+                                                resumeShop = true;
+                                                Intent intent = new Intent(CheckoutActivity.this, RegisterCustomer.class);
+                                                startActivity(intent);
+                                            }
+                                        })
+                                        .show();
+                            }
+                        }
+                    });
+                    alertDialog.show();
+                } else {
                     new SweetAlertDialog(CheckoutActivity.this, SweetAlertDialog.WARNING_TYPE)
                             .setTitleText("Oops")
                             .setContentText("Por favor inicie sesión")
@@ -85,21 +140,6 @@ public class CheckoutActivity extends ActionBarActivity {
 
         final LinearLayout linearLayout1 = (LinearLayout)findViewById(R.id.postsLayout);
 
-        ArrayAdapter adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,sucursales);
-        final ListView listView = new ListView(CheckoutActivity.this);
-        listView.setAdapter(adapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView adapterView, View view, int i, long l) {
-                currentSucursal = (String)listView.getItemAtPosition(i);
-                TextView txtVi = (TextView)findViewById(R.id.textView6);
-                txtVi.setText(currentSucursal);
-            }
-        });
-
-        linearLayout1.addView(listView);
-
         for(int x = 0; x < lista.size(); x++) {
 
             Producto current = lista.get(x);
@@ -107,7 +147,7 @@ public class CheckoutActivity extends ActionBarActivity {
             TextView productNameTxt = new TextView(CheckoutActivity.this);
             productNameTxt.setText(current._Name);
             TextView productPriceTxt = new TextView(CheckoutActivity.this);
-            productPriceTxt.setText("Precio: " + "₡" + current._Price + " | " + "Cantidad: " + current._Quantity);
+            productPriceTxt.setText("Precio: " + "₡" + current._Price + " | " + "Cantidad: " + current._Stock);
 
             Space xpace = new Space(CheckoutActivity.this);
             LinearLayout.LayoutParams imageSize = new LinearLayout.LayoutParams(25,25);
@@ -152,98 +192,66 @@ public class CheckoutActivity extends ActionBarActivity {
         }
         @Override
         protected String doInBackground(String... params) {
-            /*******************/
-            OutputStream os = null;
-            InputStream is = null;
-            HttpURLConnection conn = null;
-            String message = "";
 
-            UserDataHolder holder = UserDataHolder.getInstance();
+            SQLite user = new SQLite(CheckoutActivity.this, "DBClientes", null, 1);
+            SQLiteDatabase db = user.getWritableDatabase();
 
-            String jsonMessageString = holder.user + ":" + currentSucursal;
+            Cursor c1 = db.rawQuery("SELECT * FROM Order_Check", null);
 
-            for(int i = 0; i < holder.shoppingcart.size(); i++){
-                Producto item = holder.shoppingcart.get(i);
-                jsonMessageString += "," + item._ProductID + ":" + item._Quantity + ":" + item._Price;
+            int currentInvoiceID = 0;
+            if (c1.moveToLast()) {
+                currentInvoiceID = Integer.parseInt(c1.getString(0)) + 1;
             }
+
+            Log.i("Invoice", "Invoice " + currentInvoiceID + " generated");
 
             try {
-                //constants
-                URL url = new URL("http://cewebserver.azurewebsites.net/Service1.svc/postshop");
-                JSONObject jsonObject = new JSONObject();
-                try {
-                    jsonObject.put("DataG", jsonMessageString);
-                    message = jsonObject.toString();
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                db.execSQL("INSERT INTO Order_Check(INVOICE_ID,BOffice,Date_Time,Order_Status,Active,CUSTOMER_ID,EMPLOYEE_ID) " +
+                        "VALUES(" + "\'" + currentInvoiceID + "\'" + "," +       //OrderID
+                        "\'" + "1" + "\'" + "," +       //BOffice
+                        "datetime('now')" + "," +       //Current Time
+                        "\'" + "0" + "\'" + "," +       //Order_status
+                        "\'" + "1" + "\'" + "," +       //Active
+                        "\'" + customerID + "\'" + "," +    //Customer ID
+                        "\'" + "3535" + "\'" + ")");   //Employee ID
+
+                UserDataHolder holder = UserDataHolder.getInstance();
+                for (int i = 0; i < holder.shoppingcart.size(); i++) {
+                    Producto item = holder.shoppingcart.get(i);
+
+                    db.execSQL("INSERT INTO Purchased_Item(Price,Quantity,INVOICE_ID,PRODUCT_ID) " +
+                            "VALUES(" +
+                            "\'" + item._Price + "\'" + "," +          //Price
+                            "\'" + item._Stock + "\'" + "," +          //Quantity
+                            "\'" + currentInvoiceID + "\'" + "," +     //INVOICE_ID
+                            "\'" + item._ProductID + "\'" + ")");      //PRODUCT_ID
+
+                    Cursor c2 = db.rawQuery("SELECT Stock FROM Product WHERE PRODUCT_ID=" + "\'" + item._ProductID + "\'", null);
+
+                    if (c2.moveToFirst()) {
+                        int stock = Integer.parseInt(c2.getString(0));
+                        int pStock = stock - item._Stock;
+                        db.execSQL("UPDATE Product SET Stock=" + "\'" + pStock + "\' " + //Reducir la cantidad comprada del stock
+                                "WHERE PRODUCT_ID=" + "\'" + item._ProductID + "\'");
+                    }
+
                 }
 
-
-                conn = (HttpURLConnection) url.openConnection();
-                conn.setReadTimeout(10000 /*milliseconds*/);
-                conn.setConnectTimeout(15000 /* milliseconds */);
-                conn.setRequestMethod("POST");
-                conn.setDoInput(true);
-                conn.setDoOutput(true);
-                conn.setFixedLengthStreamingMode(message.getBytes().length);
-
-                //make some HTTP header nicety
-                conn.setRequestProperty("Content-Type", "application/json;charset=utf-8");
-                conn.setRequestProperty("X-Requested-With", "XMLHttpRequest");
-
-                //open
-                conn.connect();
-
-                //setup send
-                os = new BufferedOutputStream(conn.getOutputStream());
-                os.write(message.getBytes());
-                //clean up
-                os.flush();
-
-                //do somehting with response
-                is = conn.getInputStream();
-
-                StringBuffer response;
-
-
-                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String inputLine;
-                response = new StringBuffer();
-                while ((inputLine = in.readLine()) != null) {
-                    response.append(inputLine);
-                }
-                in.close();
-
-
-                publishProgress(response.toString());
-
-
-
-
-
-            } catch (Exception e) {
-                publishProgress(e.toString());
-            } finally {
-                //clean up
-                try {
-                    os.close();
-                    is.close();
-                } catch (IOException e) {
-                    publishProgress(e.toString());
-                }
-
-                conn.disconnect();
+                publishProgress("ok");
+            }
+            catch(Exception e){
+                publishProgress("error");
             }
 
-            return "";
+            return "ok";
         }
         @Override
         protected void onProgressUpdate(String... progress) {
-            char[] response = progress[0].toCharArray();
-            if(response[1] == 'O' && response[2]=='K') {
+
+            if(progress[0].compareTo("ok") == 0) {
                 new SweetAlertDialog(CheckoutActivity.this, SweetAlertDialog.SUCCESS_TYPE)
-                        .setTitleText("Felicidades")
-                        .setContentText("Su compra ha sido efectuada")
+                        .setTitleText("Proceso completado")
+                        .setContentText("Se ha realizado la compra")
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override
                             public void onClick(SweetAlertDialog sDialog) {
