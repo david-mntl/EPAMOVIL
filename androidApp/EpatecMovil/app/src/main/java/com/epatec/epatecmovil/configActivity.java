@@ -173,7 +173,13 @@ public class configActivity extends ActionBarActivity {
         String localMode = settings.getString("localMode", "");
         String frequency_enabled = settings.getString("frecEnabled", "");
         String ip = settings.getString("localIP", "");
-        String frequency = String.valueOf(Integer.parseInt(settings.getString("update_frecuency", "")) / 60000);
+        String frequency;
+        try {
+            frequency= String.valueOf(Integer.parseInt(settings.getString("update_frecuency", "")) / 60000);
+        }
+        catch(Exception e ){
+            frequency = "0";
+        }
 
         if(database.compareTo("true") == 0)
             db_switch.setChecked(true);

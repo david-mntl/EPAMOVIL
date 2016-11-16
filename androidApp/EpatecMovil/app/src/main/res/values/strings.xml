@@ -2,11 +2,12 @@
     <string name="app_name">EpatecMovil</string>
 
     <string name="title_section1">Inicio</string>
-    <string name="title_section2">Productos</string>
+    <string name="title_section2">Ventas</string>
     <string name="title_section3">Ingresar</string>
     <string name="title_section4">Módulo Clientes</string>
     <string name="title_section5">Módulo Proveedores</string>
     <string name="title_section6">Módulo Vendedor</string>
+    <string name="title_section7">Reportes</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -16,8 +17,8 @@
     <string name="action_example">Example action</string>
     <string name="action_settings"></string>
     <string name="title_activity_login">Ingresar</string>
-    <string name="title_activity_shop">ShopActivity</string>
-    <string name="title_activity_checkout">CheckoutActivity</string>
+    <string name="title_activity_shop">Ventas</string>
+    <string name="title_activity_checkout">Facturación</string>
     <string name="title_activity_register_customer">Registrar Cliente</string>
     <string name="title_activity_customer_module">Módulo Clientes</string>
     <string name="title_activity_edit_customer">Editar Cliente</string>
@@ -31,4 +32,5 @@
     <string name="title_activity_register_category">RegisterCategory</string>
     <string name="title_activity_edit_category">EditCategory</string>
     <string name="title_activity_edit_seller">EditSeller</string>
+    <string name="title_activity_reports">Reporte Ventas</string>
 </resources>
