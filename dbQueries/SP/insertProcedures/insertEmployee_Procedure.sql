@@ -35,7 +35,7 @@ BEGIN
 					SET ID_Employee = @ID_Employee, Name=@name, LastName1 = @lastName1 , LastName2 = @lastName2, Residence = @residence , Nickname = @nickName, Secure_Pass = @Secure_Pass , BDate = @BDate , Phone = @phone, Email = @email, Position = @position, Active = @Active, BOffice_ID = @BOffice_ID, Role = @Role
 					WHERE ID_Employee= @ID_Employee;
 
-				SET @msg = 'The Employee already existed, so it was successful updated'
+				SET @msg = 'The Employee already exist, so it was successful updated'
 				print @msg
 				COMMIT TRAN insertEmployee_Procedure;
 			END
