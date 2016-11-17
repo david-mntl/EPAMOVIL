@@ -1,5 +1,5 @@
 
-CREATE PROCEDURE inserCustomer_Procedure
+CREATE PROCEDURE insertCustomer_Procedure
 	@ID_Card integer,
 	@name varchar(100),
 	@lastName1 varchar(100),
@@ -19,7 +19,7 @@ BEGIN
     SET NOCOUNT ON;
 	declare @msg as VARCHAR(1000)
 
-    Begin Tran inserCustomer_Procedure
+    Begin Tran insertCustomer_Procedure
 
     Begin Try
 		
@@ -33,9 +33,9 @@ BEGIN
 					SET ID_Card=@ID_Card, Name=@name, LastName1 = @lastName1 , LastName2 = @lastName2, Residence = @residence , Nickname = @nickName, Secure_Pass = @Secure_Pass , BDate = @BDate , Phone = @phone, Email = @email, PriorityLevel = @priorityLevel , Active = @Active
 					WHERE ID_Card= @ID_Card;
 
-				SET @msg = 'The client already existed, so it was successful updated'
+				SET @msg = 'The client already exist, so it was successful updated'
 				print @msg
-				COMMIT TRAN inserCustomer_Procedure;
+				COMMIT TRAN insertCustomer_Procedure;
 			END
 
 		ELSE
@@ -45,14 +45,14 @@ BEGIN
 
 				SET @msg = 'The client has been created'
 				print @msg
-				COMMIT TRAN inserCustomer_Procedure;
+				COMMIT TRAN insertCustomer_Procedure;
 			END
     End try
     Begin Catch
 
         SET @msg = 'Error: ' + ERROR_MESSAGE() + ' on line ' + CONVERT(NVARCHAR(255), ERROR_LINE() ) + '.'
 		print @msg
-        Rollback TRAN inserCustomer_Procedure
+        Rollback TRAN insertCustomer_Procedure
 
     End Catch
 

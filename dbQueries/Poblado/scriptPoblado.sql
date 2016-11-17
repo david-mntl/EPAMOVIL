@@ -1,6 +1,14 @@
 USE [DBCore3]
 GO
 
+SELECT *
+  FROM [dbo].CATEGORY,BOFFICE,SUPPLIER
+GO
+
+SELECT * FROM CATEGORY
+
+
+
 INSERT INTO ROLE (Name)VALUES ('Ingeniero')
 INSERT INTO ROLE (Name)VALUES ('Arquitecto')
 INSERT INTO ROLE (Name)VALUES ('Administrador')
@@ -38,7 +46,7 @@ INSERT INTO [dbo].[PRODUCT] ([Details],[Stock],[Price],[TaxFree],[ID_Supplier],[
 INSERT INTO [dbo].[PRODUCT] ([Details],[Stock],[Price],[TaxFree],[ID_Supplier],[ID_Category],[Active],[Name],[BOffice])
      VALUES('buen techo Reforzado',30,30000,1,2222,5,1,'Techo',2)
 INSERT INTO [dbo].[PRODUCT] ([Details],[Stock],[Price],[TaxFree],[ID_Supplier],[ID_Category],[Active],[Name],[BOffice])
-     VALUES('buena conductividad',80,5000,1,3333,8,1,'Cable electrico',3)
+     VALUES('buena conductividad',80,5000,1,3333,7,1,'Cable electrico',3)
 INSERT INTO [dbo].[PRODUCT] ([Details],[Stock],[Price],[TaxFree],[ID_Supplier],[ID_Category],[Active],[Name],[BOffice])
      VALUES('Madera de Roble',60,40000,1,4444,2,1,'Puerta Delantera',3)
 INSERT INTO [dbo].[PRODUCT] ([Details],[Stock],[Price],[TaxFree],[ID_Supplier],[ID_Category],[Active],[Name],[BOffice])

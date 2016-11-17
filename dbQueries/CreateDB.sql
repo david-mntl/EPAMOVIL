@@ -3,7 +3,8 @@
 
 
 
-CREATE DATABASE DBCore;
+
+	CREATE DATABASE DBCore2;
 
 /****** Table [dbo].[BOFFICE]    ******/
 
@@ -74,6 +75,7 @@ CREATE TABLE [dbo].[ORDER_CHECK](
 	[Order_Status] [varchar](100) NOT NULL,
 	[Active] [int] NOT NULL,
 	[Customer_ID] [int] NOT NULL,
+	[Employee_ID][int] NOT NULL,
 	[BOffice] [int] NOT NULL,
 )
 
@@ -101,6 +103,7 @@ GO
 
 
 CREATE TABLE [dbo].[PURCHASE_ITEM](
+	[PurchasedItem_ID] [int] PRIMARY KEY IDENTITY(1,1) NOT NULL,
 	[Invoice_ID] [int] NULL,
 	[Quantity] [int] NULL,
 	[Price] [int] NULL,
