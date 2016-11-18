@@ -467,8 +467,111 @@ namespace WcfService1
         }
 
 
+        public string GetAllCustomer()
+        {
+            string conn = ConfigurationManager.ConnectionStrings["MyConnection"].ConnectionString;
+            SqlConnection connection = new SqlConnection(conn);
+            string query = "SELECT * FROM [CUSTOMER] WHERE Active = 1 ";
+            connection.Open();
+            SqlCommand sqlcmd = new SqlCommand(query, connection);
+            //sqlcmd.ExecuteNonQuery();
+            SqlDataAdapter sda = new SqlDataAdapter(sqlcmd);
+            DataSet dt = new DataSet();
+            sda.Fill(dt);
+            string result1 = JsonConvert.SerializeObject(dt.Tables);
+            string result = result1.Remove(result1.Length - 1).Remove(0, 1);
+            string result2 = Regex.Unescape(result);
+            result2 = result2.Replace("\\", " ");
 
-        
+            return result2;
+        }
+        public string GetAllOrder()
+        {
+            string conn = ConfigurationManager.ConnectionStrings["MyConnection"].ConnectionString;
+            SqlConnection connection = new SqlConnection(conn);
+            string query = "SELECT * FROM [ORDER_CHECK]";
+            connection.Open();
+            SqlCommand sqlcmd = new SqlCommand(query, connection);
+            //sqlcmd.ExecuteNonQuery();
+            SqlDataAdapter sda = new SqlDataAdapter(sqlcmd);
+            DataSet dt = new DataSet();
+            sda.Fill(dt);
+            string result1 = JsonConvert.SerializeObject(dt.Tables);
+            string result = result1.Remove(result1.Length - 1).Remove(0, 1);
+            string result2 = Regex.Unescape(result);
+            result2 = result2.Replace("\\", " ");
+            return result2;
+        }
+        public string GetAllEmployee()
+        {
+            string conn = ConfigurationManager.ConnectionStrings["MyConnection"].ConnectionString;
+            SqlConnection connection = new SqlConnection(conn);
+            string query = "SELECT * FROM [EMPLOYEE] WHERE Active = 1";
+            connection.Open();
+            SqlCommand sqlcmd = new SqlCommand(query, connection);
+            //sqlcmd.ExecuteNonQuery();
+            SqlDataAdapter sda = new SqlDataAdapter(sqlcmd);
+            DataSet dt = new DataSet();
+            sda.Fill(dt);
+            string result1 = JsonConvert.SerializeObject(dt.Tables);
+            string result = result1.Remove(result1.Length - 1).Remove(0, 1);
+            string result2 = Regex.Unescape(result);
+            result2 = result2.Replace("\\", " ");
+            return result2;
+        }
+        public string GetAllCategory()
+        {
+            string conn = ConfigurationManager.ConnectionStrings["MyConnection"].ConnectionString;
+            SqlConnection connection = new SqlConnection(conn);
+            string query = "SELECT * FROM [CATEGORY]";
+            connection.Open();
+            SqlCommand sqlcmd = new SqlCommand(query, connection);
+            //sqlcmd.ExecuteNonQuery();
+            SqlDataAdapter sda = new SqlDataAdapter(sqlcmd);
+            DataSet dt = new DataSet();
+            sda.Fill(dt);
+            string result1 = JsonConvert.SerializeObject(dt.Tables);
+            string result = result1.Remove(result1.Length - 1).Remove(0, 1);
+            string result2 = Regex.Unescape(result);
+            result2 = result2.Replace("\\", " ");
+            return result2;
+        }
+        public string GetAllPurchase()
+        {
+            string conn = ConfigurationManager.ConnectionStrings["MyConnection"].ConnectionString;
+            SqlConnection connection = new SqlConnection(conn);
+            string query = "SELECT * FROM [PURCHASE_ITEM]";
+            connection.Open();
+            SqlCommand sqlcmd = new SqlCommand(query, connection);
+            //sqlcmd.ExecuteNonQuery();
+            SqlDataAdapter sda = new SqlDataAdapter(sqlcmd);
+            DataSet dt = new DataSet();
+            sda.Fill(dt);
+            string result1 = JsonConvert.SerializeObject(dt.Tables);
+            string result = result1.Remove(result1.Length - 1).Remove(0, 1);
+            string result2 = Regex.Unescape(result);
+            result2 = result2.Replace("\\", " ");
+            return result2;
+        }
+        public string GetAllSupplier()
+        {
+            string conn = ConfigurationManager.ConnectionStrings["MyConnection"].ConnectionString;
+            SqlConnection connection = new SqlConnection(conn);
+            string query = "SELECT * FROM [SUPPLIER]";
+            connection.Open();
+            SqlCommand sqlcmd = new SqlCommand(query, connection);
+            //sqlcmd.ExecuteNonQuery();
+            SqlDataAdapter sda = new SqlDataAdapter(sqlcmd);
+            DataSet dt = new DataSet();
+            sda.Fill(dt);
+            string result1 = JsonConvert.SerializeObject(dt.Tables);
+            string result = result1.Remove(result1.Length - 1).Remove(0, 1);
+            string result2 = Regex.Unescape(result);
+            result2 = result2.Replace("\\", " ");
+            return result2;
+        }
+
+
         //Elimina un producto de la base de datos
         public string DeleteProduct(string id){
             string conn = ConfigurationManager.ConnectionStrings["MyConnection"].ConnectionString;
