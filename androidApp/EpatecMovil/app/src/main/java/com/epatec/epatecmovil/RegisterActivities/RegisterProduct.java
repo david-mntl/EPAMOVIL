@@ -81,58 +81,83 @@ public class RegisterProduct extends ActionBarActivity {
     }
 
     private void loadData(){
+        Spinner dropdownSupplier = (Spinner) findViewById(R.id.supplier_spinner);
+        Spinner dropdownCategory = (Spinner) findViewById(R.id.category_spinner);
+
+        String pDetalles = ((EditText) findViewById(R.id.txt_detalles)).getText().toString();
+        String pQuantity = ((EditText) findViewById(R.id.txt_quantity)).getText().toString();
+        String pName = ((EditText) findViewById(R.id.txt_name)).getText().toString();
+        String pPrice = ((EditText) findViewById(R.id.txt_price)).getText().toString();
+
         SQLite user = new SQLite(RegisterProduct.this, "DBClientes", null, 1);
         SQLiteDatabase db = user.getWritableDatabase();
 
-        try {
-            String pDetalles = ((EditText) findViewById(R.id.txt_detalles)).getText().toString();
-            String pQuantity = ((EditText) findViewById(R.id.txt_quantity)).getText().toString();
-            String pName = ((EditText) findViewById(R.id.txt_name)).getText().toString();
-            String pPrice = ((EditText) findViewById(R.id.txt_price)).getText().toString();
+        if(dropdownSupplier.getSelectedItem() != null) {
+            if(dropdownCategory.getSelectedItem() != null) {
+                if(pDetalles.compareTo("") != 0 && pQuantity.compareTo("") != 0
+                  && pName.compareTo("") != 0 && pPrice.compareTo("") != 0) {
+                    try {
 
+                        Cursor cursorsupplier = db.rawQuery("SELECT * FROM Supplier WHERE Name=" + "\'" + dropdownSupplier.getSelectedItem().toString() + "\'", null);
+                        Cursor cursorcategory = db.rawQuery("SELECT * FROM Category WHERE Name=" + "\'" + dropdownCategory.getSelectedItem().toString() + "\'", null);
 
-            Spinner dropdownSupplier = (Spinner) findViewById(R.id.supplier_spinner);
-            Spinner dropdownCategory = (Spinner) findViewById(R.id.category_spinner);
-            Cursor cursorsupplier = db.rawQuery("SELECT * FROM Supplier WHERE Name=" + "\'" + dropdownSupplier.getSelectedItem().toString() + "\'", null);
-            Cursor cursorcategory = db.rawQuery("SELECT * FROM Category WHERE Name=" + "\'" + dropdownCategory.getSelectedItem().toString() + "\'", null);
-
-            String selectedSupplier = "";
-            String selectedCategory = "";
-            if (cursorsupplier.moveToFirst()) {
-                selectedSupplier = cursorsupplier.getString(0);
-            }
-            if (cursorcategory.moveToFirst()) {
-                selectedCategory = cursorcategory.getString(0);
-            }
-
-            String pTax = "0";
-            CheckBox selectedTax = (CheckBox) findViewById(R.id.taxCheckbox);
-            if (selectedTax.isChecked()) {
-                pTax = "1";
-            }
-
-            String[] info = {"1", pDetalles, "1", pTax, pQuantity, pName, pPrice, selectedSupplier, selectedCategory};
-
-            db.execSQL("INSERT INTO Product(BOffice,Details,Active,TaxFree,Stock,Name,Price,SUPPLIER_ID,CATEGORY_ID) " +
-                    "VALUES(" + "\'" + info[0] + "\'" + "," + "\'" + info[1] + "\'" + "," + "\'" + info[2] + "\'" + "," + "\'" + info[3] + "\'" + "," + "\'" + info[4] + "\'" + "," + "\'" + info[5] + "\'"
-                    + "," + "\'" + info[6] + "\'" + "," + "\'" + info[7] + "\'" + "," + "\'" + info[8] + "\'" + ")");
-
-            new SweetAlertDialog(RegisterProduct.this, SweetAlertDialog.SUCCESS_TYPE)
-                    .setTitleText("¡Completado!")
-                    .setContentText("Producto registrado con éxito")
-                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                        @Override
-                        public void onClick(SweetAlertDialog sDialog) {
-                            sDialog.dismissWithAnimation();
-                            RegisterProduct.this.finish();
+                        String selectedSupplier = "";
+                        String selectedCategory = "";
+                        if (cursorsupplier.moveToFirst()) {
+                            selectedSupplier = cursorsupplier.getString(0);
                         }
-                    })
-                    .show();
+                        if (cursorcategory.moveToFirst()) {
+                            selectedCategory = cursorcategory.getString(0);
+                        }
+
+                        String pTax = "0";
+                        CheckBox selectedTax = (CheckBox) findViewById(R.id.taxCheckbox);
+                        if (selectedTax.isChecked()) {
+                            pTax = "1";
+                        }
+
+                        String[] info = {"1", pDetalles, "1", pTax, pQuantity, pName, pPrice, selectedSupplier, selectedCategory};
+
+                        db.execSQL("INSERT INTO Product(BOffice,Details,Active,TaxFree,Stock,Name,Price,SUPPLIER_ID,CATEGORY_ID) " +
+                                "VALUES(" + "\'" + info[0] + "\'" + "," + "\'" + info[1] + "\'" + "," + "\'" + info[2] + "\'" + "," + "\'" + info[3] + "\'" + "," + "\'" + info[4] + "\'" + "," + "\'" + info[5] + "\'"
+                                + "," + "\'" + info[6] + "\'" + "," + "\'" + info[7] + "\'" + "," + "\'" + info[8] + "\'" + ")");
+
+                        new SweetAlertDialog(RegisterProduct.this, SweetAlertDialog.SUCCESS_TYPE)
+                                .setTitleText("¡Completado!")
+                                .setContentText("ProductLocal registrado con éxito")
+                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sDialog) {
+                                        sDialog.dismissWithAnimation();
+                                        RegisterProduct.this.finish();
+                                    }
+                                })
+                                .show();
+                    } catch (SQLiteConstraintException e) {
+                        new SweetAlertDialog(RegisterProduct.this, SweetAlertDialog.WARNING_TYPE)
+                                .setTitleText("Oops")
+                                .setContentText("El nombre de producto ya ha sido registrado")
+                                .show();
+                    }
+                }
+                else{
+                    new SweetAlertDialog(RegisterProduct.this, SweetAlertDialog.WARNING_TYPE)
+                            .setTitleText("Oops")
+                            .setContentText("No puede dejar espacios en blanco")
+                            .show();
+                }
+            }
+            else{
+                new SweetAlertDialog(RegisterProduct.this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Oops")
+                        .setContentText("Por favor ingrese una categoría")
+                        .show();
+            }
         }
-        catch (SQLiteConstraintException e){
+        else{
             new SweetAlertDialog(RegisterProduct.this, SweetAlertDialog.WARNING_TYPE)
                     .setTitleText("Oops")
-                    .setContentText("El nombre de producto ya ha sido registrado")
+                    .setContentText("Por favor ingrese un proveedor")
                     .show();
         }
     }

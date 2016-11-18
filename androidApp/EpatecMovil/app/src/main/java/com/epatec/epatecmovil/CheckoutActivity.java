@@ -62,7 +62,7 @@ public class CheckoutActivity extends ActionBarActivity {
 
 
 
-        ArrayList<Producto> lista = UserDataHolder.getInstance().shoppingcart;
+        ArrayList<ProductLocal> lista = UserDataHolder.getInstance().shoppingcart;
 
         final TextView texx = (TextView) findViewById(R.id.productsQuantityTxt);
         final TextView texxTotal = (TextView) findViewById(R.id.totaltxt);
@@ -142,7 +142,7 @@ public class CheckoutActivity extends ActionBarActivity {
 
         for(int x = 0; x < lista.size(); x++) {
 
-            Producto current = lista.get(x);
+            ProductLocal current = lista.get(x);
 
             TextView productNameTxt = new TextView(CheckoutActivity.this);
             productNameTxt.setText(current._Name);
@@ -217,7 +217,7 @@ public class CheckoutActivity extends ActionBarActivity {
 
                 UserDataHolder holder = UserDataHolder.getInstance();
                 for (int i = 0; i < holder.shoppingcart.size(); i++) {
-                    Producto item = holder.shoppingcart.get(i);
+                    ProductLocal item = holder.shoppingcart.get(i);
 
                     db.execSQL("INSERT INTO Purchased_Item(Price,Quantity,INVOICE_ID,PRODUCT_ID) " +
                             "VALUES(" +

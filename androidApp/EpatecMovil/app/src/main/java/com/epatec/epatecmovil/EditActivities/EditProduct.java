@@ -191,7 +191,7 @@ public class EditProduct extends ActionBarActivity {
 
             new SweetAlertDialog(EditProduct.this, SweetAlertDialog.SUCCESS_TYPE)
                     .setTitleText("¡Completado!")
-                    .setContentText("Producto actualizado con éxito")
+                    .setContentText("ProductLocal actualizado con éxito")
                     .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                         @Override
                         public void onClick(SweetAlertDialog sDialog) {

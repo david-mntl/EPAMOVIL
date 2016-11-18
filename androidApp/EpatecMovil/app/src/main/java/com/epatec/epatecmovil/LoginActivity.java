@@ -36,46 +36,12 @@ public class LoginActivity extends ActionBarActivity {
                 //userNickname = pUser.getText().toString();
                 //userPassword = pPassword.getText().toString();
 
-                requestLogin(pUser.getText().toString(), pPassword.getText().toString());
+                //requestLogin(pUser.getText().toString(), pPassword.getText().toString());
             }
         });
     }
 
-    private void requestLogin(String pUser, String pPassword){
-        SQLite user = new SQLite(LoginActivity.this, "DBClientes", null, 1);
-        SQLiteDatabase db = user.getWritableDatabase();
 
-        Cursor c1 = db.rawQuery("SELECT Nickname,Password FROM Customer WHERE Nickname=" + "\'" + pUser + "\'", null);
-
-        //Nos aseguramos de que existe al menos un registro
-        if (c1.moveToFirst()) {
-            //Recorremos el cursor hasta que no haya más registros
-            do {
-                if(c1.getString(1).compareTo(pPassword) == 0) {
-                    UserDataHolder x = UserDataHolder.getInstance();
-                    x.user = pUser;
-                    new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.SUCCESS_TYPE)
-                            .setTitleText("¡Bienvenido " + pUser  + "!")
-                            .setContentText("Inicio de sesión exitoso")
-                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                @Override
-                                public void onClick(SweetAlertDialog sDialog) {
-                                    sDialog.dismissWithAnimation();
-                                    LoginActivity.this.finish();
-                                }
-                            })
-                            .show();
-                }
-                else{
-                    new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.ERROR_TYPE)
-                            .setTitleText("Oops")
-                            .setContentText("Usuario o contraseña incorrectos")
-                            .show();
-                }
-            } while(c1.moveToNext());
-        }
-
-    }
 
     /*
     private class AsyncTaskConnector extends AsyncTask<String, String, String> {

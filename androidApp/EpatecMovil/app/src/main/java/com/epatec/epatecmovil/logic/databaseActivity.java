@@ -26,7 +26,7 @@ public class databaseActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_database);
 
-        String[] db_tables_names = {"Product","Customer","Seller","Category","Supplier","Order_Check","Purchased_Item"};
+        String[] db_tables_names = {"Product","Customer","Seller","Category","Supplier","Order_Check","Purchased_Item","SQLITE_SEQUENCE"};
 
 
         Spinner dropdownList = (Spinner)findViewById(R.id.datos_spinner);

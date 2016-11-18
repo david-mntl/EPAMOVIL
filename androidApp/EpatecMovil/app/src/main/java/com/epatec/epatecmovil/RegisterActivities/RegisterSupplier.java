@@ -38,6 +38,8 @@ public class RegisterSupplier extends ActionBarActivity {
                             SQLite user = new SQLite(RegisterSupplier.this, "DBClientes", null, 1);
                             SQLiteDatabase db = user.getWritableDatabase();
 
+
+
                             db.execSQL("INSERT INTO Supplier(SUPPLIER_ID,Active,Name,Country,Phone) " +
                                     "VALUES(" + "\'" + info[0] + "\'" + "," + "\'" + "1"+ "\'" + "," + "\'" + info[1] + "\'" + "," +
                                             "\'" + info[2] + "\'" + "," + "\'" + info[3] + "\'" + ")");
