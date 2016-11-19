@@ -8,6 +8,8 @@ namespace WcfService1{
     [DataContract]
     public class Purchase_Item{
         [DataMember]
+        public int PurchasedItem_ID { get; set; }
+        [DataMember]
         public int Invoice_ID { get; set; }
         [DataMember]
         public int Quantity { get; set; }

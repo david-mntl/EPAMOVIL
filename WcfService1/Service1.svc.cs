@@ -51,6 +51,18 @@ namespace WcfService1
             {
                 return ee.Message;
             }
+            try
+            {
+                conn = ConfigurationManager.ConnectionStrings["MyConnection2"].ConnectionString;
+                connection = new SqlConnection(conn);
+                connection.Open();
+                connection.CreateCommand();
+                return "ok";
+            }
+            catch (Exception ee)
+            {
+                return ee.Message;
+            }
         }
 
         
@@ -689,7 +701,7 @@ namespace WcfService1
             //string conn = ConfigurationManager.ConnectionStrings["MyConnection"].ConnectionString;
             //SqlConnection connection = new SqlConnection(conn);
             DateTime dtvar = Convert.ToDateTime(str.Date_Time);
-            string query = "EXEC [dbo].[insertOrderCheck_Procedure] @Date_Time,@OrderStatus,@Active,@Customer_ID,Employee_ID,@BOffice";
+            string query = "EXEC [dbo].[insertOrderCheck_Procedure] @InvoiceID,@Date_Time,@OrderStatus,@Active,@Customer_ID,@Employee_ID,@BOffice";
 
             string msg = "all good";
             try
@@ -697,6 +709,7 @@ namespace WcfService1
                 //connection.Open();
                 this.connect();
                 SqlCommand sqlcmd = new SqlCommand(query, connection);
+                sqlcmd.Parameters.AddWithValue("@InvoiceID", str.InvoiceID);
                 sqlcmd.Parameters.AddWithValue("@Customer_ID", str.Customer_ID);
                 sqlcmd.Parameters.AddWithValue("@Employee_ID", str.Employee_ID);
                 sqlcmd.Parameters.AddWithValue("@BOffice", str.BOffice);
@@ -724,7 +737,7 @@ namespace WcfService1
             //SqlConnection connection = new SqlConnection(conn);
             string query = "EXEC [dbo].[insertProduct_Procedure] @ID_Product,@Details,@Stock,@Price,@TaxFree,@ID_Supplier,@ID_Category,@Active,@Name,@BOffice";
 
-            string msg = "all good";
+            string msg = "all goodas";
             try
             {
                 //connection.Open();
@@ -760,7 +773,7 @@ namespace WcfService1
         {
             //string conn = ConfigurationManager.ConnectionStrings["MyConnection"].ConnectionString;
             //SqlConnection connection = new SqlConnection(conn);
-            string query = "EXEC [dbo].[insertPurchaseItem_Procedure] @Invoice_ID,@Quantity,@Price,@Product_ID";
+            string query = "EXEC [dbo].[insertPurchaseItem_Procedure] @PurchasedItem_ID,@Invoice_ID,@Quantity,@Price,@Product_ID";
 
             string msg = "all good";
             try
@@ -768,7 +781,7 @@ namespace WcfService1
                 //connection.Open();
                 this.connect();
                 SqlCommand sqlcmd = new SqlCommand(query, connection);
-                //sqlcmd.Parameters.AddWithValue("@ID_Product", str.ID_Product);
+                sqlcmd.Parameters.AddWithValue("@PurchasedItem_ID", str.PurchasedItem_ID);
                 sqlcmd.Parameters.AddWithValue("@Invoice_ID", str.Invoice_ID);
                 sqlcmd.Parameters.AddWithValue("@Quantity", str.Quantity);
                 sqlcmd.Parameters.AddWithValue("@Price", str.Price);

@@ -7,7 +7,10 @@ using System.Web;
 namespace WcfService1{
     [DataContract]
     public class Order_Check{
-        
+
+        [DataMember]
+        public int InvoiceID { get; set; }
+
         [DataMember]
         public int BOffice { get; set; }
         [DataMember]
