@@ -40,7 +40,7 @@ public class EditSupplier extends ActionBarActivity {
         if (c1.moveToFirst()) {
             //Recorremos el cursor hasta que no haya más registros
             do {
-                if(c1.getString(1).compareTo("1")==0) {
+                if(c1.getString(1).compareTo("true")==0) {
                     supplierList.add(c1.getString(2));
                 }
             } while(c1.moveToNext());
@@ -115,7 +115,7 @@ public class EditSupplier extends ActionBarActivity {
                                     "\'" + info[2] + "\'" + "," + "\'" + info[3] + "\'" + ")");*/
 
                             db.execSQL("UPDATE Supplier SET SUPPLIER_ID=" + "\'" + info[0] + "\'" + "," +
-                                                            "Active=" + "\'" + "1" + "\'" + "," +
+                                                            "Active=" + "\'" + "true" + "\'" + "," +
                                                             "Name=" + "\'" + info[1] + "\'" + "," +
                                                             "Country=" + "\'" + info[2] + "\'" + "," +
                                                             "Phone=" + "\'" + info[3] + "\'" + "" +
@@ -170,7 +170,7 @@ public class EditSupplier extends ActionBarActivity {
 
                         SQLite user = new SQLite(EditSupplier.this, "DBClientes", null, 1);
                         SQLiteDatabase db = user.getWritableDatabase();
-                        db.execSQL("UPDATE Supplier SET Active=0 WHERE SUPPLIER_ID=" + "\'" + pID + "\'");
+                        db.execSQL("UPDATE Supplier SET Active='false' WHERE SUPPLIER_ID=" + "\'" + pID + "\'");
 
                         sDialog.dismissWithAnimation();
                         EditSupplier.this.finish();

@@ -71,10 +71,6 @@
             android:name=".EditActivities.EditSeller"
             android:label="@string/title_activity_edit_seller" />
 
-        <receiver
-            android:name=".dataAccess.SyncroAlarm"
-            android:process=":remote" />
-
         <service
             android:name=".dataAccess.SyncroService"
             android:enabled="true"

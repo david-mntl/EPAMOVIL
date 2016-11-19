@@ -115,6 +115,8 @@ public class SyncroService extends Service {
             if(net_status) {
 
                 if(webservice_status) {
+                    SyncroDBHandler newHandler2 = new SyncroDBHandler();
+                    newHandler2.publishDatabaseService(SyncroService.this);
                     publishProgress("Conexión a Internet y WebService disponibles");
                 }
                 else{

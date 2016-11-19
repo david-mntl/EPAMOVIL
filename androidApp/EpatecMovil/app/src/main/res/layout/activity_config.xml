@@ -82,8 +82,8 @@
             <EditText
                 android:layout_width="260dp"
                 android:layout_height="35dp"
-                android:inputType="number|numberDecimal"
-                android:digits="0123456789."
+                android:inputType="text"
+                android:digits="0123456789.:"
                 android:ems="10"
                 android:id="@+id/txt_ip"
                 android:layout_row="2"

@@ -2,28 +2,31 @@ package com.epatec.epatecmovil;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.epatec.epatecmovil.EditActivities.EditSeller;
 import com.epatec.epatecmovil.dataAccess.ReportsActivity;
-import com.epatec.epatecmovil.dataAccess.SyncroAlarm;
+import com.epatec.epatecmovil.dataAccess.SQLite;
+import com.epatec.epatecmovil.dataAccess.SyncroDBHandler;
 import com.epatec.epatecmovil.dataAccess.SyncroService;
-import com.epatec.epatecmovil.dataAccess.SyncroServiceOld;
 import com.epatec.epatecmovil.logic.NavigationDrawerFragment;
 import com.epatec.epatecmovil.logic.databaseActivity;
 
@@ -33,8 +36,9 @@ public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     private SharedPreferences settings;
-    private NavigationDrawerFragment mNavigationDrawerFragment;
-    private CharSequence mTitle;
+    public CharSequence mTitle;
+    public static SweetAlertDialog dbupdate_alert;
+    public static SweetAlertDialog dbupload_alert;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +48,7 @@ public class MainActivity extends ActionBarActivity
         settings  = getSharedPreferences("settingsFile",0);
 
 
-
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
+        NavigationDrawerFragment mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
         mNavigationDrawerFragment.setUp(
@@ -77,6 +80,38 @@ public class MainActivity extends ActionBarActivity
             }
         });
 
+        final ImageButton updatedb = (ImageButton) findViewById(R.id.update_db_button);
+        updatedb.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                dbupdate_alert = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.PROGRESS_TYPE);
+                dbupdate_alert.getProgressHelper().setSpinSpeed(2);
+                dbupdate_alert.getProgressHelper().setBarColor(Color.parseColor("#ECB72F"));
+                dbupdate_alert.setTitleText("Sincronizando Base de Datos");
+                dbupdate_alert.setCancelable(false);
+                dbupdate_alert.show();
+
+                SyncroDBHandler newHandler = new SyncroDBHandler();
+                newHandler.syncronizeDatabase(MainActivity.this);
+
+            }
+        });
+
+        final ImageButton uploaddb = (ImageButton) findViewById(R.id.upload_db_button);
+        uploaddb.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                dbupload_alert = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.PROGRESS_TYPE);
+                dbupload_alert.getProgressHelper().setSpinSpeed(2);
+                dbupload_alert.getProgressHelper().setBarColor(Color.parseColor("#ECB72F"));
+                dbupload_alert.setTitleText("Sincronizando Base de Datos");
+                dbupload_alert.setCancelable(false);
+                dbupload_alert.show();
+
+                SyncroDBHandler newHandler2 = new SyncroDBHandler();
+                newHandler2.publishDatabase(MainActivity.this);
+
+            }
+        });
+
         final ImageButton dbButton = (ImageButton) findViewById(R.id.db_button);
         dbButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -102,7 +137,7 @@ public class MainActivity extends ActionBarActivity
         logoutButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 final UserDataHolder x = UserDataHolder.getInstance();
-                if(x.user != "") {
+                if(x.user.compareTo("") == 0) {
                     new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
                             .setTitleText("")
                             .setContentText("¿Está seguro que desea salir?")
@@ -156,9 +191,9 @@ public class MainActivity extends ActionBarActivity
 
         AlarmManager alarm = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         alarm.setRepeating(AlarmManager.RTC_WAKEUP,
-                            System.currentTimeMillis(), //First Execution Time
-                            UserDataHolder.getInstance().update_frequency, //Execution Time Frequency
-                            pintent);                                      //Intent to be executed
+                System.currentTimeMillis(), //First Execution Time
+                UserDataHolder.getInstance().update_frequency, //Execution Time Frequency
+                pintent);                                      //Intent to be executed
     }
 
 
@@ -175,8 +210,9 @@ public class MainActivity extends ActionBarActivity
                 break;
             case 3:
                 mTitle = getString(R.string.title_section3);
-                Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(loginIntent);
+                loginFragment();
+                //Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+                //startActivity(loginIntent);
                 break;
             case 4:
                 mTitle = getString(R.string.title_section4);
@@ -200,14 +236,81 @@ public class MainActivity extends ActionBarActivity
                 break;
         }
     }
+    public void loginFragment(){
+        final Dialog dialog = new Dialog(MainActivity.this);
+        dialog.setTitle("Ingrese al sistema");
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_box);
+        final LinearLayout featureLayout = (LinearLayout) View.inflate(MainActivity.this, R.layout.fragment_login, null);
 
-    public void restoreActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
+        final Button okbutton = (Button) featureLayout.findViewById(R.id.ok_btn);
+        okbutton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                final EditText pUser = (EditText)featureLayout.findViewById(R.id.userTxt);
+                final EditText pPass = (EditText)featureLayout.findViewById(R.id.passTxt);
+
+                requestLogin(pUser.getText().toString(),pPass.getText().toString());
+                dialog.dismiss();
+            }
+        });
+
+        final Button cancelButton = (Button) featureLayout.findViewById(R.id.cancel_btn);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.setContentView(featureLayout);
+        dialog.show();
     }
 
+    private void requestLogin(String pUser, String pPassword){
+        SQLite user = new SQLite(MainActivity.this, "DBClientes", null, 1);
+        SQLiteDatabase db = user.getWritableDatabase();
+
+        Cursor c1 = db.rawQuery("SELECT Nickname,Password,SELLER_ID FROM Seller WHERE Nickname=" + "\'" + pUser + "\'", null);
+
+        //Nos aseguramos de que existe al menos un registro
+        if (c1.moveToFirst()) {
+            //Recorremos el cursor hasta que no haya más registros
+            do {
+                if(c1.getString(1).compareTo(pPassword) == 0) {
+                    UserDataHolder x = UserDataHolder.getInstance();
+                    x.user = pUser;
+                    x.userID = c1.getString(2);
+                    new SweetAlertDialog(MainActivity.this, SweetAlertDialog.SUCCESS_TYPE)
+                            .setTitleText("¡Bienvenido " + pUser  + "!")
+                            .setContentText("Inicio de sesión exitoso")
+                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sDialog) {
+                                    final TextView usertxt = (TextView)findViewById(R.id.usertxtview);
+                                    UserDataHolder x = UserDataHolder.getInstance();
+                                    usertxt.setText(x.user);
+                                    sDialog.dismissWithAnimation();
+                                }
+                            })
+                            .show();
+                }
+                else{
+                    new SweetAlertDialog(MainActivity.this, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Oops")
+                            .setContentText("Contraseña incorrecta")
+                            .show();
+                }
+            } while(c1.moveToNext());
+        }
+        else{
+            new SweetAlertDialog(MainActivity.this, SweetAlertDialog.ERROR_TYPE)
+                    .setTitleText("Oops")
+                    .setContentText("Usuario no encontrado")
+                    .show();
+        }
+
+    }
 
     public static class PlaceholderFragment extends Fragment {
         private static final String ARG_SECTION_NUMBER = "section_number";
@@ -221,13 +324,6 @@ public class MainActivity extends ActionBarActivity
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
             return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
         }
 
         @Override
