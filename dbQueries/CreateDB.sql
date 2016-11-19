@@ -1,9 +1,6 @@
 /******************Create DATABASE ************************/
 
 
-
-
-
 	CREATE DATABASE DBCore2;
 
 /****** Table [dbo].[BOFFICE]    ******/
@@ -72,7 +69,7 @@ GO
 CREATE TABLE [dbo].[ORDER_CHECK](
 	[Invoice_ID] [int] PRIMARY KEY IDENTITY(1,1) NOT NULL,
 	[Date_Time] [datetime] NOT NULL,
-	[Order_Status] [varchar](100) NOT NULL,
+	[Order_Status] integer NOT NULL,
 	[Active] [int] NOT NULL,
 	[Customer_ID] [int] NOT NULL,
 	[Employee_ID][int] NOT NULL,
@@ -127,6 +124,14 @@ GO
 
 CREATE TABLE [dbo].[ROLE](
 	[ID_Role] [int] PRIMARY KEY IDENTITY(1,1) NOT NULL,	
+	[Name] [varchar](50) NOT NULL,		
+)
+GO
+
+/******  Table [dbo].[Status]   ******/
+
+CREATE TABLE [dbo].[STATUS](
+	[ID_Status] [int] PRIMARY KEY IDENTITY(1,1) NOT NULL,	
 	[Name] [varchar](50) NOT NULL,		
 )
 GO

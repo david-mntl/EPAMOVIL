@@ -2,7 +2,7 @@
 CREATE PROCEDURE insertOrderCheck_Procedure
 	@invoice_ID integer,
 	@dateTime datetime,
-	@orderStatus varchar(100),
+	@orderStatus integer,
 	@active integer,
 	@customer_ID integer,
 	@employee_ID integer,
@@ -36,8 +36,12 @@ BEGIN
 
 		ELSE
 			Begin 
-				insert into ORDER_CHECK(Date_Time, Order_Status, Active, Customer_ID,Employee_ID, BOffice)
-				values(@dateTime,@orderStatus, @active, @customer_ID, @employee_ID,@BOffice) 
+				SET IDENTITY_INSERT ORDER_CHECK on;
+
+				insert into ORDER_CHECK(Invoice_ID,Date_Time, Order_Status, Active, Customer_ID,Employee_ID, BOffice)
+				values(@invoice_ID,@dateTime,@orderStatus, @active, @customer_ID, @employee_ID,@BOffice) 
+
+				SET IDENTITY_INSERT ORDER_CHECK off;
 
 				SET @msg = 'The supplier has been created'
 				print @msg

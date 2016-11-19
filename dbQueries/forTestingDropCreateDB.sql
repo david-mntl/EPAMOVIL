@@ -38,6 +38,8 @@ DROP TABLE [SUPPLIER];
 
 DROP TABLE [ROLE];
 
+DROP TABLE [STATUS];
+
 
 
 /******************Create DATABASE ************************/
