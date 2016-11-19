@@ -79,7 +79,7 @@ public class RegisterCustomer extends ActionBarActivity {
                             db.execSQL("INSERT INTO Customer(CUSTOMER_ID,Name,LastName1,LastName2,Residence,Nickname,Password,BDate,Phone,Email,PriorityLevel,Active) " +
                                     "VALUES(" + "\'" + info[0] + "\'" + "," + "\'" + info[1] + "\'" + "," + "\'" + info[2] + "\'" + "," + "\'" + info[3] + "\'" + "," + "\'" + info[4] + "\'" + "," + "\'" + info[8] + "\'"
                                     + "," + "\'" + info[9] + "\'" + "," + "\'" + info[5] + "\'" + "," + "\'" + info[6] + "\'" + "," + "\'" + info[7] + "\'" + ","
-                                    + "\'" + "1" + "\'" + "," + "\'" + "1" + "\'" + ")");
+                                    + "\'" + "1" + "\'" + "," + "\'" + "true" + "\'" + ")");
 
                             new SweetAlertDialog(RegisterCustomer.this, SweetAlertDialog.SUCCESS_TYPE)
                                     .setTitleText("¡Completado!")

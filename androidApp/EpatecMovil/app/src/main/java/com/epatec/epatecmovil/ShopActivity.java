@@ -1,43 +1,21 @@
 package com.epatec.epatecmovil;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.text.InputType;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.epatec.epatecmovil.dataAccess.SQLite;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
-import org.json.JSONException;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-
-import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class ShopActivity extends ActionBarActivity {
 
@@ -71,7 +49,7 @@ public class ShopActivity extends ActionBarActivity {
 
     private class AsyncTaskConnector extends AsyncTask<String, String, String> {
 
-        ArrayList<Producto> listaInfoProductos = new ArrayList<>();
+        ArrayList<ProductLocal> listaInfoProductLocals = new ArrayList<>();
 
         @Override
         protected void onPreExecute() {
@@ -90,14 +68,14 @@ public class ShopActivity extends ActionBarActivity {
                 if (cursor.moveToFirst()) {
                     //Recorremos el cursor hasta que no haya más registros
                     do {
-                        Producto newProduct = new Producto(
+                        ProductLocal newProduct = new ProductLocal(
                                 Integer.parseInt(cursor.getString(0)), //Product ID
                                 Integer.parseInt(cursor.getString(5)), //Product Stock
                                 Integer.parseInt(cursor.getString(7)), //Product Price
                                 cursor.getString(6),                   //Product Name
                                 cursor.getString(2)                    //Product Details
                         );
-                        listaInfoProductos.add(newProduct);
+                        listaInfoProductLocals.add(newProduct);
                     } while(cursor.moveToNext());
 
 
@@ -120,13 +98,13 @@ public class ShopActivity extends ActionBarActivity {
         protected void onProgressUpdate(String... progress) {
 
             final LinearLayout linearLayout1 = (LinearLayout)findViewById(R.id.postsLayout);
-            for(int x = 0; x < listaInfoProductos.size(); x++) {
+            for(int x = 0; x < listaInfoProductLocals.size(); x++) {
 
-                int itemID = listaInfoProductos.get(x)._ProductID;
-                String pName = listaInfoProductos.get(x)._Name;
-                String pDetails = listaInfoProductos.get(x)._Details;
-                String pPrice = String.valueOf(listaInfoProductos.get(x)._Price);
-                String pStock = String.valueOf(listaInfoProductos.get(x)._Stock);
+                int itemID = listaInfoProductLocals.get(x)._ProductID;
+                String pName = listaInfoProductLocals.get(x)._Name;
+                String pDetails = listaInfoProductLocals.get(x)._Details;
+                String pPrice = String.valueOf(listaInfoProductLocals.get(x)._Price);
+                String pStock = String.valueOf(listaInfoProductLocals.get(x)._Stock);
 
                 TextView productNameTxt = new TextView(ShopActivity.this);
                 productNameTxt.setText("Nombre: " + pName);
@@ -148,7 +126,7 @@ public class ShopActivity extends ActionBarActivity {
                         dialog.setTitle("Selecciona la cantidad");
                         dialog.setCanceledOnTouchOutside(false);
                         dialog.setCancelable(false);
-                        final LinearLayout featureLayout = (LinearLayout) View.inflate(ShopActivity.this, R.layout.quantity, null);
+                        final LinearLayout featureLayout = (LinearLayout) View.inflate(ShopActivity.this, R.layout.fragment_quantity, null);
 
                         /***********************************************************/
                         /************** BOTON PARA AÑADIR AL CARRO *****************/
@@ -273,9 +251,9 @@ public class ShopActivity extends ActionBarActivity {
         private int getProductPrice(int itemID){
             int result = 0;
 
-            for(int i = 0; i < listaInfoProductos.size(); i++){
-                if(listaInfoProductos.get(i)._ProductID == itemID){
-                    result = listaInfoProductos.get(i)._Price;
+            for(int i = 0; i < listaInfoProductLocals.size(); i++){
+                if(listaInfoProductLocals.get(i)._ProductID == itemID){
+                    result = listaInfoProductLocals.get(i)._Price;
                     break;
                 }
             }
@@ -285,9 +263,9 @@ public class ShopActivity extends ActionBarActivity {
         private String getProductName(int itemID){
             String result = "";
 
-            for(int i = 0; i < listaInfoProductos.size(); i++){
-                if(listaInfoProductos.get(i)._ProductID == itemID){
-                    result = listaInfoProductos.get(i)._Name;
+            for(int i = 0; i < listaInfoProductLocals.size(); i++){
+                if(listaInfoProductLocals.get(i)._ProductID == itemID){
+                    result = listaInfoProductLocals.get(i)._Name;
                     break;
                 }
             }

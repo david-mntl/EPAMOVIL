@@ -62,7 +62,7 @@ public class CheckoutActivity extends ActionBarActivity {
 
 
 
-        ArrayList<Producto> lista = UserDataHolder.getInstance().shoppingcart;
+        ArrayList<ProductLocal> lista = UserDataHolder.getInstance().shoppingcart;
 
         final TextView texx = (TextView) findViewById(R.id.productsQuantityTxt);
         final TextView texxTotal = (TextView) findViewById(R.id.totaltxt);
@@ -142,7 +142,7 @@ public class CheckoutActivity extends ActionBarActivity {
 
         for(int x = 0; x < lista.size(); x++) {
 
-            Producto current = lista.get(x);
+            ProductLocal current = lista.get(x);
 
             TextView productNameTxt = new TextView(CheckoutActivity.this);
             productNameTxt.setText(current._Name);
@@ -193,54 +193,57 @@ public class CheckoutActivity extends ActionBarActivity {
         @Override
         protected String doInBackground(String... params) {
 
-            SQLite user = new SQLite(CheckoutActivity.this, "DBClientes", null, 1);
-            SQLiteDatabase db = user.getWritableDatabase();
+            if(UserDataHolder.getInstance().userID.compareTo("") != 0 ) {
+                SQLite user = new SQLite(CheckoutActivity.this, "DBClientes", null, 1);
+                SQLiteDatabase db = user.getWritableDatabase();
 
-            Cursor c1 = db.rawQuery("SELECT * FROM Order_Check", null);
-
-            int currentInvoiceID = 0;
-            if (c1.moveToLast()) {
-                currentInvoiceID = Integer.parseInt(c1.getString(0)) + 1;
-            }
-
-            Log.i("Invoice", "Invoice " + currentInvoiceID + " generated");
-
-            try {
-                db.execSQL("INSERT INTO Order_Check(INVOICE_ID,BOffice,Date_Time,Order_Status,Active,CUSTOMER_ID,EMPLOYEE_ID) " +
-                        "VALUES(" + "\'" + currentInvoiceID + "\'" + "," +       //OrderID
-                        "\'" + "1" + "\'" + "," +       //BOffice
-                        "datetime('now')" + "," +       //Current Time
-                        "\'" + "0" + "\'" + "," +       //Order_status
-                        "\'" + "1" + "\'" + "," +       //Active
-                        "\'" + customerID + "\'" + "," +    //Customer ID
-                        "\'" + "3535" + "\'" + ")");   //Employee ID
-
-                UserDataHolder holder = UserDataHolder.getInstance();
-                for (int i = 0; i < holder.shoppingcart.size(); i++) {
-                    Producto item = holder.shoppingcart.get(i);
-
-                    db.execSQL("INSERT INTO Purchased_Item(Price,Quantity,INVOICE_ID,PRODUCT_ID) " +
+                try {
+                    db.execSQL("INSERT INTO Order_Check(BOffice,Date_Time,Order_Status,Active,CUSTOMER_ID,EMPLOYEE_ID) " +
+                            //"VALUES(" + "\'" + currentInvoiceID + "\'" + "," +       //OrderID
                             "VALUES(" +
-                            "\'" + item._Price + "\'" + "," +          //Price
-                            "\'" + item._Stock + "\'" + "," +          //Quantity
-                            "\'" + currentInvoiceID + "\'" + "," +     //INVOICE_ID
-                            "\'" + item._ProductID + "\'" + ")");      //PRODUCT_ID
+                            "\'" + "1" + "\'" + "," +       //BOffice
+                            "datetime('now')" + "," +       //Current Time
+                            "\'" + "0" + "\'" + "," +       //Order_status
+                            "\'" + "true" + "\'" + "," +       //Active
+                            "\'" + customerID + "\'" + "," +    //Customer ID
+                            "\'" + UserDataHolder.getInstance().userID + "\'" + ")");   //Employee ID
 
-                    Cursor c2 = db.rawQuery("SELECT Stock FROM Product WHERE PRODUCT_ID=" + "\'" + item._ProductID + "\'", null);
+                    Cursor c1 = db.rawQuery("SELECT * FROM Order_Check", null);
 
-                    if (c2.moveToFirst()) {
-                        int stock = Integer.parseInt(c2.getString(0));
-                        int pStock = stock - item._Stock;
-                        db.execSQL("UPDATE Product SET Stock=" + "\'" + pStock + "\' " + //Reducir la cantidad comprada del stock
-                                "WHERE PRODUCT_ID=" + "\'" + item._ProductID + "\'");
+                    int currentInvoiceID = 0;
+                    if (c1.moveToLast()) {
+                        currentInvoiceID = Integer.parseInt(c1.getString(0)) + 1;
                     }
 
-                }
+                    UserDataHolder holder = UserDataHolder.getInstance();
+                    for (int i = 0; i < holder.shoppingcart.size(); i++) {
+                        ProductLocal item = holder.shoppingcart.get(i);
 
-                publishProgress("ok");
+                        db.execSQL("INSERT INTO Purchased_Item(Price,Quantity,INVOICE_ID,PRODUCT_ID) " +
+                                "VALUES(" +
+                                "\'" + item._Price + "\'" + "," +          //Price
+                                "\'" + item._Stock + "\'" + "," +          //Quantity
+                                "\'" + currentInvoiceID + "\'" + "," +     //INVOICE_ID
+                                "\'" + item._ProductID + "\'" + ")");      //PRODUCT_ID
+
+                        Cursor c2 = db.rawQuery("SELECT Stock FROM Product WHERE PRODUCT_ID=" + "\'" + item._ProductID + "\'", null);
+
+                        if (c2.moveToFirst()) {
+                            int stock = Integer.parseInt(c2.getString(0));
+                            int pStock = stock - item._Stock;
+                            db.execSQL("UPDATE Product SET Stock=" + "\'" + pStock + "\' " + //Reducir la cantidad comprada del stock
+                                    "WHERE PRODUCT_ID=" + "\'" + item._ProductID + "\'");
+                        }
+
+                    }
+
+                    publishProgress("ok");
+                } catch (Exception e) {
+                    publishProgress("error");
+                }
             }
-            catch(Exception e){
-                publishProgress("error");
+            else{
+                publishProgress("notLogin");
             }
 
             return "ok";
@@ -262,6 +265,12 @@ public class CheckoutActivity extends ActionBarActivity {
                                 CheckoutActivity.this.finish();
                             }
                         })
+                        .show();
+            }
+            else if(progress[0].compareTo("notLogin") == 0) {
+                new SweetAlertDialog(CheckoutActivity.this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Oops")
+                        .setContentText("Por favor ingrese al sistema")
                         .show();
             }
             else{

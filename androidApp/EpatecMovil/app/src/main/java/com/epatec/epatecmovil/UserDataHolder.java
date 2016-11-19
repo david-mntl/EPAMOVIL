@@ -9,7 +9,8 @@ public class UserDataHolder {
     public String userID = "";
     public String pUserDate = "";
     public int update_frequency = 0;
-    public ArrayList<Producto> shoppingcart;
+    public boolean db_refresh = false;
+    public ArrayList<ProductLocal> shoppingcart;
 
     private UserDataHolder() {
         shoppingcart = new ArrayList<>();
@@ -23,7 +24,7 @@ public class UserDataHolder {
     public void addProductToShoppingCart(int id,int quantity,int price,String name){
         boolean inserted = false;
         if(shoppingcart.size() == 0) {
-            Producto nuevo = new Producto(id, quantity,price,name,"");
+            ProductLocal nuevo = new ProductLocal(id, quantity,price,name,"");
             shoppingcart.add(nuevo);
         }
         else{
@@ -34,7 +35,7 @@ public class UserDataHolder {
                 }
             }
             if(inserted == false){
-                Producto nuevo = new Producto(id, quantity,price,name,"");
+                ProductLocal nuevo = new ProductLocal(id, quantity,price,name,"");
                 shoppingcart.add(nuevo);
             }
         }
@@ -52,7 +53,7 @@ public class UserDataHolder {
         int result = 0;
 
         for(int i = 0; i < shoppingcart.size(); i++){
-            Producto current = shoppingcart.get(i);
+            ProductLocal current = shoppingcart.get(i);
             result += (current._Price * current._Stock);
         }
 

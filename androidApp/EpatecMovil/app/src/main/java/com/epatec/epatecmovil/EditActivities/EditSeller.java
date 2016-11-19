@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -31,7 +32,7 @@ public class EditSeller extends ActionBarActivity {
 
         final UserDataHolder x = UserDataHolder.getInstance();
 
-
+        final EditText pID = (EditText)findViewById(R.id.txt_id);
         final EditText pName = (EditText)findViewById(R.id.txt_name);
         final EditText pLast1 = (EditText)findViewById(R.id.txt_lastname1);
         final EditText pLast2 = (EditText)findViewById(R.id.txt_lastname2);
@@ -47,34 +48,23 @@ public class EditSeller extends ActionBarActivity {
 
         Cursor c = dbRead.rawQuery("SELECT * FROM Seller WHERE SELLER_ID=" + "\'" + x.userID + "\'", null);
 
+        Log.i("IDSeller",x.userID);
+
         if (c.moveToFirst()) {
-            if(c.getString(11).compareTo("0") != 0) {
-                do {
-                    //String codigo= c.getString(0);
-                    pName.setText(c.getString(1));
-                    pLast1.setText(c.getString(2));
-                    pLast2.setText(c.getString(3));
-                    pResidence.setText(c.getString(4));
-                    pDate.setText(c.getString(7));
-                    pPhone.setText(c.getString(8));
-                    pMail.setText(c.getString(9));
-                    pUser.setText(c.getString(5));
-                    pPass.setText(c.getString(6));
-                } while (c.moveToNext());
-            }
-            else{
-                new SweetAlertDialog(EditSeller.this, SweetAlertDialog.ERROR_TYPE)
-                        .setTitleText("Oops")
-                        .setContentText("No existe un usuario con el ID ingresado")
-                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sDialog) {
-                                sDialog.dismissWithAnimation();
-                                EditSeller.this.finish();
-                            }
-                        })
-                        .show();
-            }
+            do {
+                //String codigo= c.getString(0);
+                pID.setText(c.getString(0));
+                pName.setText(c.getString(1));
+                pLast1.setText(c.getString(2));
+                pLast2.setText(c.getString(3));
+                pResidence.setText(c.getString(4));
+                pDate.setText(c.getString(7));
+                pPhone.setText(c.getString(8));
+                pMail.setText(c.getString(9));
+                pUser.setText(c.getString(5));
+                pPass.setText(c.getString(6));
+            } while (c.moveToNext());
+
         }
         else{
             new SweetAlertDialog(EditSeller.this, SweetAlertDialog.ERROR_TYPE)
@@ -131,7 +121,7 @@ public class EditSeller extends ActionBarActivity {
 
                         SQLite user = new SQLite(EditSeller.this, "DBClientes", null, 1);
                         SQLiteDatabase db = user.getWritableDatabase();
-                        db.execSQL("UPDATE Seller SET Active=0 WHERE SELLER_ID=" + "\'" + pID +"\'");
+                        db.execSQL("UPDATE Seller SET Active='false' WHERE SELLER_ID=" + "\'" + pID +"\'");
 
                         sDialog.dismissWithAnimation();
                         EditSeller.this.finish();
@@ -165,7 +155,7 @@ public class EditSeller extends ActionBarActivity {
                     db.execSQL("INSERT INTO Seller(SELLER_ID,Name,LastName1,LastName2,Residence,Nickname,Password,BDate,Phone,Email,Active) " +
                             "VALUES(" + "\'" + info[0] + "\'" + "," + "\'" + info[1] + "\'" + "," + "\'" + info[2] + "\'" + "," + "\'" + info[3] + "\'" + "," + "\'" + info[4] + "\'" + "," + "\'" + info[8] + "\'"
                             + "," + "\'" + info[9] + "\'" + "," + "\'" + info[5] + "\'" + "," + "\'" + info[6] + "\'" + "," + "\'" + info[7] + "\'" + ","
-                            + "\'" + "1" + "\'" + ")");
+                            + "\'" + "true" + "\'" + ")");
 
                     new SweetAlertDialog(EditSeller.this, SweetAlertDialog.SUCCESS_TYPE)
                             .setTitleText("¡Completado!")

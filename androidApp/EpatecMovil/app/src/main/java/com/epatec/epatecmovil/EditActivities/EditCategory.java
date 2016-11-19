@@ -37,7 +37,7 @@ public class EditCategory extends ActionBarActivity {
         if (c1.moveToFirst()) {
             //Recorremos el cursor hasta que no haya más registros
             do {
-                if(c1.getString(2).compareTo("1")==0) {
+                if(c1.getString(2).compareTo("true")==0) {
                     categoryList.add(c1.getString(1));
                 }
             } while(c1.moveToNext());
@@ -87,7 +87,7 @@ public class EditCategory extends ActionBarActivity {
                             SQLiteDatabase db = user.getWritableDatabase();
 
                             db.execSQL("UPDATE Category SET Name=" + "\'" + info[0] + "\'" + ","+
-                                                        "Active=" + "\'" + "1" + "\'" +
+                                                        "Active=" + "\'" + "true" + "\'" +
                                                         "WHERE Name=" + "\'" + dropdownCategory.getSelectedItem().toString() + "\'");
 
                             new SweetAlertDialog(EditCategory.this, SweetAlertDialog.SUCCESS_TYPE)

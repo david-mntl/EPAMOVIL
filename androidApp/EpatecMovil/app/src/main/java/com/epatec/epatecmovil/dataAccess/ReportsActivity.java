@@ -1,6 +1,5 @@
 package com.epatec.epatecmovil.dataAccess;
 
-import android.app.Dialog;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -9,8 +8,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -18,9 +15,8 @@ import android.widget.Space;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.epatec.epatecmovil.Producto;
+import com.epatec.epatecmovil.ProductLocal;
 import com.epatec.epatecmovil.R;
-import com.epatec.epatecmovil.UserDataHolder;
 
 import java.util.ArrayList;
 
@@ -82,7 +78,7 @@ public class ReportsActivity extends ActionBarActivity {
 
     private class AsyncTaskConnector extends AsyncTask<String, String, String> {
 
-        ArrayList<Producto> listaInfoProductos = new ArrayList<>();
+        ArrayList<ProductLocal> listaInfoProductLocals = new ArrayList<>();
 
         @Override
         protected void onPreExecute() {
@@ -105,14 +101,14 @@ public class ReportsActivity extends ActionBarActivity {
                     do {
                         Cursor infoP = dbRead.rawQuery("SELECT Name,Details FROM Product WHERE PRODUCT_ID="+"\'" + cursor.getString(4) +"\'", null);
                         if(infoP.moveToFirst()) {
-                            Producto newProduct = new Producto(
+                            ProductLocal newProduct = new ProductLocal(
                                     Integer.parseInt(cursor.getString(4)), //Product ID
                                     Integer.parseInt(cursor.getString(2)), //Product Stock
                                     Integer.parseInt(cursor.getString(1)), //Product Price
                                     infoP.getString(0),                   //Product Name
                                     infoP.getString(1)                    //Product Details
                             );
-                            listaInfoProductos.add(newProduct);
+                            listaInfoProductLocals.add(newProduct);
                         }
                     } while(cursor.moveToNext());
 
@@ -137,13 +133,13 @@ public class ReportsActivity extends ActionBarActivity {
 
             int total = 0;
 
-            for(int x = 0; x < listaInfoProductos.size(); x++) {
-                String pName = listaInfoProductos.get(x)._Name;
-                String pDetails = listaInfoProductos.get(x)._Details;
-                String pPrice = String.valueOf(listaInfoProductos.get(x)._Price);
-                String pStock = String.valueOf(listaInfoProductos.get(x)._Stock);
+            for(int x = 0; x < listaInfoProductLocals.size(); x++) {
+                String pName = listaInfoProductLocals.get(x)._Name;
+                String pDetails = listaInfoProductLocals.get(x)._Details;
+                String pPrice = String.valueOf(listaInfoProductLocals.get(x)._Price);
+                String pStock = String.valueOf(listaInfoProductLocals.get(x)._Stock);
 
-                int subtotal = listaInfoProductos.get(x)._Price * listaInfoProductos.get(x)._Stock;
+                int subtotal = listaInfoProductLocals.get(x)._Price * listaInfoProductLocals.get(x)._Stock;
 
                 TextView productNameTxt = new TextView(ReportsActivity.this);
                 productNameTxt.setText("Nombre: " + pName);
