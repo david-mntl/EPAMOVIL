@@ -33,17 +33,32 @@ BEGIN
 			END
 
 		ELSE
-			Begin 
-				SET IDENTITY_INSERT PURCHASE_ITEM on;
+			BEGIN
+				IF @purchasedItem_ID =0
+					Begin 					
 
-				insert into PURCHASE_ITEM(PurchasedItem_ID,Invoice_ID,Quantity,Price,Product_ID)
-				values(@purchasedItem_ID,@invoice_ID,@quantity, @price, @product_ID) 
+						insert into PURCHASE_ITEM(Invoice_ID,Quantity,Price,Product_ID)
+						values(@invoice_ID,@quantity, @price, @product_ID) 						
 
-				SET IDENTITY_INSERT PURCHASE_ITEM off;
+						SET @msg = 'The purchased item has been created'
+						print @msg
+						COMMIT TRAN insertPurchaseItem_Procedure;
+					END
+			
+			
+				ELSE
+					Begin 
+						SET IDENTITY_INSERT PURCHASE_ITEM on;
 
-				SET @msg = 'The purchased item has been created'
-				print @msg
-				COMMIT TRAN insertPurchaseItem_Procedure;
+						insert into PURCHASE_ITEM(PurchasedItem_ID,Invoice_ID,Quantity,Price,Product_ID)
+						values(@purchasedItem_ID,@invoice_ID,@quantity, @price, @product_ID) 
+
+						SET IDENTITY_INSERT PURCHASE_ITEM off;
+
+						SET @msg = 'The purchased item has been created'
+						print @msg
+						COMMIT TRAN insertPurchaseItem_Procedure;
+					END
 			END
     End try
     Begin Catch
