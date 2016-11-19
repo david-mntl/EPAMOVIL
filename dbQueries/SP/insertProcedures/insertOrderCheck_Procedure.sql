@@ -35,18 +35,34 @@ BEGIN
 			END
 
 		ELSE
-			Begin 
-				SET IDENTITY_INSERT ORDER_CHECK on;
+			BEGIN
+				IF @invoice_ID = 0
+					BEGIN
+						insert into ORDER_CHECK(Date_Time, Order_Status, Active, Customer_ID,Employee_ID, BOffice)
+						values(@dateTime,@orderStatus, @active, @customer_ID, @employee_ID,@BOffice) 
+						SET IDENTITY_INSERT ORDER_CHECK off;
 
-				insert into ORDER_CHECK(Invoice_ID,Date_Time, Order_Status, Active, Customer_ID,Employee_ID, BOffice)
-				values(@invoice_ID,@dateTime,@orderStatus, @active, @customer_ID, @employee_ID,@BOffice) 
+						SET @msg = 'The Order has been created'
+						print @msg
+						COMMIT TRAN insertOrderCheck_Procedure;
+					END
+				ELSE
+					Begin 
+						SET IDENTITY_INSERT ORDER_CHECK on;
 
-				SET IDENTITY_INSERT ORDER_CHECK off;
+						insert into ORDER_CHECK(Invoice_ID,Date_Time, Order_Status, Active, Customer_ID,Employee_ID, BOffice)
+						values(@invoice_ID,@dateTime,@orderStatus, @active, @customer_ID, @employee_ID,@BOffice) 
 
-				SET @msg = 'The supplier has been created'
-				print @msg
-				COMMIT TRAN insertOrderCheck_Procedure;
+						SET IDENTITY_INSERT ORDER_CHECK off;
+
+						SET @msg = 'The Order has been created'
+						print @msg
+						COMMIT TRAN insertOrderCheck_Procedure;
+					END
+
+
 			END
+			
     End try
     Begin Catch
 

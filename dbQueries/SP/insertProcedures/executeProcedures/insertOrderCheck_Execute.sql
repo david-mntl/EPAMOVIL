@@ -4,15 +4,15 @@ GO
 DECLARE @RC int
 DECLARE @invoice_ID int
 DECLARE @dateTime datetime
-DECLARE @orderStatus varchar(100)
+DECLARE @orderStatus integer
 DECLARE @active int
 DECLARE @customer_ID int
 DECLARE @employee_ID int
 DECLARE @BOffice int
 
-SET @invoice_ID = 0
+SET @invoice_ID = 70
 SET @dateTime = 17/11/2016
-SET @orderStatus = 'Completed'
+SET @orderStatus = 1
 SET @active = 1
 SET @customer_ID = 2121
 SET @employee_ID = 2121

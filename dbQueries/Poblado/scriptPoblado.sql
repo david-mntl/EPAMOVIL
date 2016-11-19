@@ -8,12 +8,15 @@ GO
 SELECT * FROM CATEGORY
 
 
-
+INSERT INTO ROLE (Name)VALUES ('Empleado')
 INSERT INTO ROLE (Name)VALUES ('Ingeniero')
 INSERT INTO ROLE (Name)VALUES ('Arquitecto')
 INSERT INTO ROLE (Name)VALUES ('Administrador')
-INSERT INTO ROLE (Name)VALUES ('Empleado')
 INSERT INTO ROLE (Name)VALUES ('Distribuidor')
+
+INSERT INTO STATUS (Name)VALUES ('Entregado')
+INSERT INTO STATUS (Name)VALUES ('Pendiente')
+INSERT INTO STATUS (Name)VALUES ('En Proceso')
 
 INSERT INTO BOFFICE(Name)VALUES ('Cartago')
 INSERT INTO BOFFICE(Name)VALUES ('San Jose')
@@ -56,3 +59,6 @@ INSERT INTO [dbo].[PRODUCT] ([Details],[Stock],[Price],[TaxFree],[ID_Supplier],[
 INSERT INTO [dbo].[PRODUCT] ([Details],[Stock],[Price],[TaxFree],[ID_Supplier],[ID_Category],[Active],[Name],[BOffice])
      VALUES('Clava lo que sea',40,6000,1,1111,4,1,'Martillo',6)
 
+INSERT INTO EMPLOYEE VALUES (123,'Benito','Ca','Mel','CR','fasm22','123',22/8/2016,'33445','123quesitoStop@gmail.com','Empleado',1,1,1)
+INSERT INTO EMPLOYEE VALUES (345,'Lenin','Dictador','Moustache','Rusia','tvLenin','123',22/8/2016,'2534','dic@gmail.com','Empleado',1,1,1)
+INSERT INTO EMPLOYEE VALUES (678,'Allahu','Ak','Bar','india','Boom','123',22/8/2016,'44440006','boom@gmail.com','Empleado',1,1,1)

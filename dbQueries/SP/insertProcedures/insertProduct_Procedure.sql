@@ -38,17 +38,31 @@ BEGIN
 
 		ELSE
 			Begin
-				
-				SET IDENTITY_INSERT [PRODUCT] on;
+				IF @id_Product = 0
+					BEGIN
+					
+						insert into PRODUCT(Details, Stock, Price, TaxFree, ID_Supplier, ID_Category, Active, Name, BOffice)
+						values( @details, @stock, @price, @taxFree, @id_Supplier, @id_Category, @active,@name,@bOffice)
+
+						SET @msg = 'The Product has been created'
+						print @msg
+						COMMIT TRAN insertProduct_Procedure;
+
+					END
+				ELSE
+					BEGIN
+					
+						SET IDENTITY_INSERT [PRODUCT] on;
 				 
-				insert into PRODUCT(ID_Product, Details, Stock, Price, TaxFree, ID_Supplier, ID_Category, Active, Name, BOffice)
-				values(@id_Product, @details, @stock, @price, @taxFree, @id_Supplier, @id_Category, @active,@name,@bOffice)
+						insert into PRODUCT(ID_Product, Details, Stock, Price, TaxFree, ID_Supplier, ID_Category, Active, Name, BOffice)
+						values(@id_Product, @details, @stock, @price, @taxFree, @id_Supplier, @id_Category, @active,@name,@bOffice)
 
-				SET IDENTITY_INSERT [PRODUCT] off;
+						SET IDENTITY_INSERT [PRODUCT] off;
 
-				SET @msg = 'The Product has been created'
-				print @msg
-				COMMIT TRAN insertProduct_Procedure;
+						SET @msg = 'The Product has been created'
+						print @msg
+						COMMIT TRAN insertProduct_Procedure;
+					END
 			END
     End try
     Begin Catch
