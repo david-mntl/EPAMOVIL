@@ -121,7 +121,7 @@ public class EditSeller extends ActionBarActivity {
 
                         SQLite user = new SQLite(EditSeller.this, "DBClientes", null, 1);
                         SQLiteDatabase db = user.getWritableDatabase();
-                        db.execSQL("UPDATE Seller SET Active=0 WHERE SELLER_ID=" + "\'" + pID +"\'");
+                        db.execSQL("UPDATE Seller SET Active='false' WHERE SELLER_ID=" + "\'" + pID +"\'");
 
                         sDialog.dismissWithAnimation();
                         EditSeller.this.finish();
@@ -155,7 +155,7 @@ public class EditSeller extends ActionBarActivity {
                     db.execSQL("INSERT INTO Seller(SELLER_ID,Name,LastName1,LastName2,Residence,Nickname,Password,BDate,Phone,Email,Active) " +
                             "VALUES(" + "\'" + info[0] + "\'" + "," + "\'" + info[1] + "\'" + "," + "\'" + info[2] + "\'" + "," + "\'" + info[3] + "\'" + "," + "\'" + info[4] + "\'" + "," + "\'" + info[8] + "\'"
                             + "," + "\'" + info[9] + "\'" + "," + "\'" + info[5] + "\'" + "," + "\'" + info[6] + "\'" + "," + "\'" + info[7] + "\'" + ","
-                            + "\'" + "1" + "\'" + ")");
+                            + "\'" + "true" + "\'" + ")");
 
                     new SweetAlertDialog(EditSeller.this, SweetAlertDialog.SUCCESS_TYPE)
                             .setTitleText("¡Completado!")

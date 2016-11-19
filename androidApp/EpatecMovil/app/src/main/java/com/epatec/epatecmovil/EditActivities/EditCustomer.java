@@ -45,7 +45,7 @@ public class EditCustomer extends ActionBarActivity {
         Cursor c = dbRead.rawQuery("SELECT * FROM Customer WHERE CUSTOMER_ID=" + "\'" + customerID.getText() + "\'", null);
 
         if (c.moveToFirst()) {
-            if(c.getString(11).compareTo("0") != 0) {
+            if(c.getString(11).compareTo("true") == 0) {
                 do {
                     //String codigo= c.getString(0);
                     pName.setText(c.getString(1));
@@ -128,7 +128,7 @@ public class EditCustomer extends ActionBarActivity {
 
                         SQLite user = new SQLite(EditCustomer.this, "DBClientes", null, 1);
                         SQLiteDatabase db = user.getWritableDatabase();
-                        db.execSQL("UPDATE Customer SET Active=0 WHERE CUSTOMER_ID=" + "\'" + pID +"\'");
+                        db.execSQL("UPDATE Customer SET Active='false' WHERE CUSTOMER_ID=" + "\'" + pID +"\'");
 
                         sDialog.dismissWithAnimation();
                         EditCustomer.this.finish();

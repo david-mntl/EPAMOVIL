@@ -44,7 +44,7 @@ public class EditProduct extends ActionBarActivity {
         if (c1.moveToFirst()) {
             //Recorremos el cursor hasta que no haya más registros
             do {
-                if(c1.getString(3).compareTo("1")==0) {
+                if(c1.getString(3).compareTo("true")==0) {
                     productsList.add(c1.getString(6));
                 }
             } while(c1.moveToNext());
@@ -176,7 +176,7 @@ public class EditProduct extends ActionBarActivity {
                 pTax = "1";
             }
 
-            String[] info = {"1", pDetalles, "1", pTax, pQuantity, pName, pPrice, selectedSupplier, selectedCategory};
+            String[] info = {"1", pDetalles, "true", pTax, pQuantity, pName, pPrice, selectedSupplier, selectedCategory};
 
             db.execSQL("UPDATE Product SET BOffice=" + "\'" + info[0] + "\'" + "," +
                                         "Details=" + "\'" + info[1] + "\'" + "," +
@@ -221,7 +221,7 @@ public class EditProduct extends ActionBarActivity {
 
                         SQLite user = new SQLite(EditProduct.this, "DBClientes", null, 1);
                         SQLiteDatabase db = user.getWritableDatabase();
-                        db.execSQL("UPDATE Product SET Active=0 WHERE Name=" + "\'" + pName +"\'");
+                        db.execSQL("UPDATE Product SET Active='false' WHERE Name=" + "\'" + pName +"\'");
 
                         sDialog.dismissWithAnimation();
                         EditProduct.this.finish();

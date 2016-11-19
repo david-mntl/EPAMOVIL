@@ -35,7 +35,7 @@ public class RegisterCategory extends ActionBarActivity {
                             SQLiteDatabase db = user.getWritableDatabase();
 
                             db.execSQL("INSERT INTO Category(Name,Active) " +
-                                    "VALUES(" + "\'" + info[0] + "\'" + "," + "\'" + "1" + "\'"+ ")");
+                                    "VALUES(" + "\'" + info[0] + "\'" + "," + "\'" + "true" + "\'"+ ")");
 
                             new SweetAlertDialog(RegisterCategory.this, SweetAlertDialog.SUCCESS_TYPE)
                                     .setTitleText("¡Completado!")

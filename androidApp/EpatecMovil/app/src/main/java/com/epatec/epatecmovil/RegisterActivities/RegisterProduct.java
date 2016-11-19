@@ -116,7 +116,7 @@ public class RegisterProduct extends ActionBarActivity {
                             pTax = "1";
                         }
 
-                        String[] info = {"1", pDetalles, "1", pTax, pQuantity, pName, pPrice, selectedSupplier, selectedCategory};
+                        String[] info = {"1", pDetalles, "true", pTax, pQuantity, pName, pPrice, selectedSupplier, selectedCategory};
 
                         db.execSQL("INSERT INTO Product(BOffice,Details,Active,TaxFree,Stock,Name,Price,SUPPLIER_ID,CATEGORY_ID) " +
                                 "VALUES(" + "\'" + info[0] + "\'" + "," + "\'" + info[1] + "\'" + "," + "\'" + info[2] + "\'" + "," + "\'" + info[3] + "\'" + "," + "\'" + info[4] + "\'" + "," + "\'" + info[5] + "\'"
