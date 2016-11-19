@@ -203,7 +203,7 @@ public class CheckoutActivity extends ActionBarActivity {
                             "VALUES(" +
                             "\'" + "1" + "\'" + "," +       //BOffice
                             "datetime('now')" + "," +       //Current Time
-                            "\'" + "0" + "\'" + "," +       //Order_status
+                            "\'" + "1" + "\'" + "," +       //Order_status
                             "\'" + "true" + "\'" + "," +       //Active
                             "\'" + customerID + "\'" + "," +    //Customer ID
                             "\'" + UserDataHolder.getInstance().userID + "\'" + ")");   //Employee ID
@@ -212,7 +212,7 @@ public class CheckoutActivity extends ActionBarActivity {
 
                     int currentInvoiceID = 0;
                     if (c1.moveToLast()) {
-                        currentInvoiceID = Integer.parseInt(c1.getString(0)) + 1;
+                        currentInvoiceID = Integer.parseInt(c1.getString(0));
                     }
 
                     UserDataHolder holder = UserDataHolder.getInstance();

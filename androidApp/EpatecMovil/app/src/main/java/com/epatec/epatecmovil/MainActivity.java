@@ -102,7 +102,7 @@ public class MainActivity extends ActionBarActivity
                 dbupload_alert = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.PROGRESS_TYPE);
                 dbupload_alert.getProgressHelper().setSpinSpeed(2);
                 dbupload_alert.getProgressHelper().setBarColor(Color.parseColor("#ECB72F"));
-                dbupload_alert.setTitleText("Sincronizando Base de Datos");
+                dbupload_alert.setTitleText("Actualizando Base de Datos");
                 dbupload_alert.setCancelable(false);
                 dbupload_alert.show();
 

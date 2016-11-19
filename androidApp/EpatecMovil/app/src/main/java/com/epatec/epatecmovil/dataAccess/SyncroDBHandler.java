@@ -39,7 +39,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class SyncroDBHandler {
 
     AsyncTaskConnector _connector;
-    AsyncTaskPublisherService _publisher;
+    AsyncTaskPublisher _publisher;
     AsyncTaskPublisherService _service;
     Context _context;
 
@@ -60,7 +60,7 @@ public class SyncroDBHandler {
 
     public void publishDatabase(Context pContext){
         _context = pContext;
-        _publisher = new AsyncTaskPublisherService();
+        _publisher = new AsyncTaskPublisher();
         _publisher.execute("init");
 
     }
@@ -138,7 +138,7 @@ public class SyncroDBHandler {
 
                     // make GET request to the given URL
                     //HttpResponse httpResponse = httpclient.execute(new HttpGet("http://cewebserver.azurewebsites.net/Service1.svc/GetProducts?params=all"));
-                    HttpResponse httpResponse = httpclient.execute(new HttpGet(serverURL + "/Service1.svc/" + webServices[i]));
+                    HttpResponse httpResponse = httpclient.execute(new HttpGet("http://" + serverURL + "/Service1.svc/" + webServices[i]));
                     // receive response as inputStream
                     inputStream = httpResponse.getEntity().getContent();
 
@@ -824,7 +824,7 @@ public class SyncroDBHandler {
             if(localMode.compareTo("true") == 0)
                 serverURL = localIP;
             else
-                serverURL=_context.getString(R.string.webservice_url);
+                serverURL= _context.getString(R.string.webservice_url);
 
 
 
@@ -967,7 +967,7 @@ public class SyncroDBHandler {
                 String message = "";
                 JSONObject jsonObject = new JSONObject();
                 try {
-                    URL url = new URL(serverURL + "/Service1.svc" + webServices[0]);
+                    URL url = new URL("http://" + serverURL + "/Service1.svc" + webServices[0]);
                     jsonObject.put("ID_Category", inf._CATEGORYID);
                     jsonObject.put("Details",inf._Name);
                     message = jsonObject.toString();
@@ -991,7 +991,7 @@ public class SyncroDBHandler {
                 JSONObject jsonObject = new JSONObject();
                 try {
                     //Active":1,"BOffice_ID":4,"Role":
-                    URL url = new URL(serverURL + "/Service1.svc" + webServices[1]);
+                    URL url = new URL("http://" + serverURL + "/Service1.svc" + webServices[1]);
                     jsonObject.put("ID_Employee", inf._SellerID);
                     jsonObject.put("Name", inf._Name);
                     jsonObject.put("LastName1", inf._LastName1);
@@ -1027,7 +1027,7 @@ public class SyncroDBHandler {
                 String message = "";
                 JSONObject jsonObject = new JSONObject();
                 try {
-                    URL url = new URL(serverURL + "/Service1.svc" + webServices[2]);
+                    URL url = new URL("http://" + serverURL + "/Service1.svc" + webServices[2]);
                     jsonObject.put("ID_Card", inf._CUSTOMER_ID);
                     jsonObject.put("Name", inf._Name);
                     jsonObject.put("LastName1", inf._LastName1);
@@ -1058,10 +1058,10 @@ public class SyncroDBHandler {
                 String message = "";
                 JSONObject jsonObject = new JSONObject();
                 try {
-                    URL url = new URL(serverURL + "/Service1.svc" + webServices[3]);
+                    URL url = new URL("http://" + serverURL + "/Service1.svc" + webServices[3]);
                     jsonObject.put("InvoiceID", inf._INVOICE_ID);
                     jsonObject.put("Date_Time",inf._Date_Time);
-                    jsonObject.put("Order_Status",inf._Order_Status);
+                    jsonObject.put("Order_Status",Integer.parseInt(inf._Order_Status));
                     if(inf._Active == false){
                         jsonObject.put("Active","0");
                     }
@@ -1089,7 +1089,7 @@ public class SyncroDBHandler {
                 String message = "";
                 JSONObject jsonObject = new JSONObject();
                 try {
-                    URL url = new URL(serverURL + "/Service1.svc" + webServices[4]);
+                    URL url = new URL("http://" + serverURL + "/Service1.svc" + webServices[4]);
                     jsonObject.put("ID_Product", inf._ProductID);
                     jsonObject.put("Details", inf._Details);
                     jsonObject.put("Stock", inf._Stock);
@@ -1120,18 +1120,20 @@ public class SyncroDBHandler {
 
             // PURCHASE_ITEM
             for(int i = 0; i < listaInfoPurchase.size(); i++) {
-
+                //{"PurchasedItem_ID":1, "Invoice_ID": 2501, "Quantity": 20, "Price": 10000, "Product_ID": 3}
                 Purchased_Item inf = listaInfoPurchase.get(i);
                 String message = "";
                 JSONObject jsonObject = new JSONObject();
                 try {
-                    URL url = new URL(serverURL + "/Service1.svc" + webServices[5]);
+                    URL url = new URL("http://" + serverURL + "/Service1.svc" + webServices[5]);
                     jsonObject.put("PurchasedItem_ID", inf._PURCHASEDITEM_ID);
                     jsonObject.put("Invoice_ID",inf._INVOICE_ID);
                     jsonObject.put("Quantity",inf._Quantity);
                     jsonObject.put("Price",inf._Price);
                     jsonObject.put("Product_ID",inf._PRODUCT_ID);
                     message = jsonObject.toString();
+
+                    Log.i("EFF",message);
 
                     publishProgress("Ítems Comprados");
                     doOnlineRequest(url,message);
@@ -1151,7 +1153,7 @@ public class SyncroDBHandler {
                 String message = "";
                 JSONObject jsonObject = new JSONObject();
                 try {
-                    URL url = new URL(serverURL + "/Service1.svc" + webServices[6]);
+                    URL url = new URL("http://" + serverURL + "/Service1.svc" + webServices[6]);
                     jsonObject.put("ID_Supplier", inf._SUPPLIER_ID);
                     if(inf._Active == false){
                         jsonObject.put("Active","0");
@@ -1300,7 +1302,7 @@ public class SyncroDBHandler {
             if(localMode.compareTo("true") == 0)
                 serverURL = localIP;
             else
-                serverURL=_context.getString(R.string.webservice_url);
+                serverURL = _context.getString(R.string.webservice_url);
 
 
 
@@ -1443,7 +1445,7 @@ public class SyncroDBHandler {
                 String message = "";
                 JSONObject jsonObject = new JSONObject();
                 try {
-                    URL url = new URL(serverURL + "/Service1.svc" + webServices[0]);
+                    URL url = new URL("http://" + serverURL + "/Service1.svc" + webServices[0]);
                     jsonObject.put("ID_Category", inf._CATEGORYID);
                     jsonObject.put("Details",inf._Name);
                     message = jsonObject.toString();
@@ -1467,7 +1469,7 @@ public class SyncroDBHandler {
                 JSONObject jsonObject = new JSONObject();
                 try {
                     //Active":1,"BOffice_ID":4,"Role":
-                    URL url = new URL(serverURL + "/Service1.svc" + webServices[1]);
+                    URL url = new URL("http://" + serverURL + "/Service1.svc" + webServices[1]);
                     jsonObject.put("ID_Employee", inf._SellerID);
                     jsonObject.put("Name", inf._Name);
                     jsonObject.put("LastName1", inf._LastName1);
@@ -1503,7 +1505,7 @@ public class SyncroDBHandler {
                 String message = "";
                 JSONObject jsonObject = new JSONObject();
                 try {
-                    URL url = new URL(serverURL + "/Service1.svc" + webServices[2]);
+                    URL url = new URL("http://" + serverURL + "/Service1.svc" + webServices[2]);
                     jsonObject.put("ID_Card", inf._CUSTOMER_ID);
                     jsonObject.put("Name", inf._Name);
                     jsonObject.put("LastName1", inf._LastName1);
@@ -1534,10 +1536,10 @@ public class SyncroDBHandler {
                 String message = "";
                 JSONObject jsonObject = new JSONObject();
                 try {
-                    URL url = new URL(serverURL + "/Service1.svc" + webServices[3]);
+                    URL url = new URL("http://" + serverURL + "/Service1.svc" + webServices[3]);
                     jsonObject.put("InvoiceID", inf._INVOICE_ID);
                     jsonObject.put("Date_Time",inf._Date_Time);
-                    jsonObject.put("Order_Status",inf._Order_Status);
+                    jsonObject.put("Order_Status",Integer.parseInt(inf._Order_Status));
                     if(inf._Active == false){
                         jsonObject.put("Active","0");
                     }
@@ -1565,7 +1567,7 @@ public class SyncroDBHandler {
                 String message = "";
                 JSONObject jsonObject = new JSONObject();
                 try {
-                    URL url = new URL(serverURL + "/Service1.svc" + webServices[4]);
+                    URL url = new URL("http://" + serverURL + "/Service1.svc" + webServices[4]);
                     jsonObject.put("ID_Product", inf._ProductID);
                     jsonObject.put("Details", inf._Details);
                     jsonObject.put("Stock", inf._Stock);
@@ -1601,7 +1603,7 @@ public class SyncroDBHandler {
                 String message = "";
                 JSONObject jsonObject = new JSONObject();
                 try {
-                    URL url = new URL(serverURL + "/Service1.svc" + webServices[5]);
+                    URL url = new URL("http://" + serverURL + "/Service1.svc" + webServices[5]);
                     jsonObject.put("PurchasedItem_ID", inf._PURCHASEDITEM_ID);
                     jsonObject.put("Invoice_ID",inf._INVOICE_ID);
                     jsonObject.put("Quantity",inf._Quantity);
@@ -1627,7 +1629,7 @@ public class SyncroDBHandler {
                 String message = "";
                 JSONObject jsonObject = new JSONObject();
                 try {
-                    URL url = new URL(serverURL + "/Service1.svc" + webServices[6]);
+                    URL url = new URL("http://" + serverURL + "/Service1.svc" + webServices[6]);
                     jsonObject.put("ID_Supplier", inf._SUPPLIER_ID);
                     if(inf._Active == false){
                         jsonObject.put("Active","0");
