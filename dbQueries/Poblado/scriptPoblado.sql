@@ -1,4 +1,4 @@
-USE [DBCore3]
+USE [DBCore2]
 GO
 
 SELECT *

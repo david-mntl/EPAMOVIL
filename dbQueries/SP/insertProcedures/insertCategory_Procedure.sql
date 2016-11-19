@@ -30,8 +30,12 @@ BEGIN
 
 		ELSE
 			Begin 
-				insert into CATEGORY(Details)
-				values(@details) 
+				SET IDENTITY_INSERT CATEGORY on;
+
+				insert into CATEGORY(ID_Category,Details)
+				values(@id_Category,@details) 
+
+				SET IDENTITY_INSERT CATEGORY off;
 
 				SET @msg = 'The Category has been created'
 				print @msg

@@ -34,8 +34,12 @@ BEGIN
 
 		ELSE
 			Begin 
-				insert into PURCHASE_ITEM(Invoice_ID,Quantity,Price,Product_ID)
-				values(@invoice_ID,@quantity, @price, @product_ID) 
+				SET IDENTITY_INSERT PURCHASE_ITEM on;
+
+				insert into PURCHASE_ITEM(PurchasedItem_ID,Invoice_ID,Quantity,Price,Product_ID)
+				values(@purchasedItem_ID,@invoice_ID,@quantity, @price, @product_ID) 
+
+				SET IDENTITY_INSERT PURCHASE_ITEM off;
 
 				SET @msg = 'The purchased item has been created'
 				print @msg
