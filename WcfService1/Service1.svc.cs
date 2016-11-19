@@ -310,7 +310,7 @@ namespace WcfService1
         {
             string conn = ConfigurationManager.ConnectionStrings["MyConnection"].ConnectionString;
             SqlConnection connection = new SqlConnection(conn);
-            string query = "INSERT INTO EMPLOYEE VALUES(@ID_Employee,@Name,@LastName1,LastName2,@Residence,@Nickname, @Secure_Pass,@BDate,@Phone,@Email,@Position,@Active,@BOffice_ID,@Role)";
+            string query = "INSERT INTO EMPLOYEE VALUES(@ID_Employee,@Name,@LastName1,@LastName2,@Residence,@Nickname, @Secure_Pass,@BDate,@Phone,@Email,@Position,@Active,@BOffice_ID,@Role)";
             //DateTime bdate = Convert.ToDateTime(str.BDate);
             string msg = "all good";
             try
@@ -466,7 +466,7 @@ namespace WcfService1
             return result2;
         }
 
-
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         public string GetAllCustomer()
         {
             string conn = ConfigurationManager.ConnectionStrings["MyConnection"].ConnectionString;
@@ -570,8 +570,264 @@ namespace WcfService1
             result2 = result2.Replace("\\", " ");
             return result2;
         }
+        /****************************************************************************************************************************/
+        public string PostNEWCustomer(Customer str)
+        {
+            //string conn = ConfigurationManager.ConnectionStrings["MyConnection"].ConnectionString;
+            //SqlConnection connection = new SqlConnection(conn);
+            string query = "EXEC [dbo].[insertCustomer_Procedure] @ID_Card,@Name,@LastName1,@LastName2,@Residence,@Nickname, @Secure_Pass,@BDate,@Phone,@Email,@PriorityLevel,1";
+            //string query = "INSERT INTO CUSTOMER VALUES(12423, 'Leni4cn', 'Torre4s', 'Valv4erde', 'c4r', 'tvleni4n3', '122435', 03/04/ 16, 88848, 'tvl4lll', 1, 1)";
+            string msg = "all good";
+            try
+            {
+                msg += " intenta";
+                //connection.Open();
+                this.connect();
+                msg += " conecta";
+                SqlCommand sqlcmd = new SqlCommand(query, connection);
+                sqlcmd.Parameters.AddWithValue("@ID_Card", str.ID_Card);
+                sqlcmd.Parameters.AddWithValue("@Name", str.Name);
+                sqlcmd.Parameters.AddWithValue("@LastName1", str.LastName1);
+                sqlcmd.Parameters.AddWithValue("@LastName2", str.LastName2);
+                sqlcmd.Parameters.AddWithValue("@Residence", str.Residence);
+                sqlcmd.Parameters.AddWithValue("@Nickname", str.Nickname);
+                sqlcmd.Parameters.AddWithValue("@Secure_Pass", str.Secure_Pass);
+                sqlcmd.Parameters.AddWithValue("@BDate", Convert.ToDateTime(str.BDate));
+                sqlcmd.Parameters.AddWithValue("@Phone", str.Phone);
+                sqlcmd.Parameters.AddWithValue("@Email", str.Email);
+                sqlcmd.Parameters.AddWithValue("@PriorityLevel", str.PriorityLevel);
+                //sqlcmd.Parameters.AddWithValue("@Active", str.Active);
+
+                msg += " va a ejecutar" + str.ID_Card + str.Name + Convert.ToDateTime(str.BDate);
+                sqlcmd.CommandType = CommandType.Text;
+                sqlcmd.ExecuteNonQuery();
+                msg += " No ejecutar";
+            }
+            catch (System.Data.SqlClient.SqlException ex)
+            {
+                msg += " Insert Error:";
+                msg += "Error" + query;
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            return msg;
+        }
+        public string PostNEWCategory(Category str)
+        {
+            //string conn = ConfigurationManager.ConnectionStrings["MyConnection"].ConnectionString;
+            //SqlConnection connection = new SqlConnection(conn);
+
+            string query = "EXEC [dbo].[insertCategory_Procedure] @id_Category,@Details";
+            string msg = "all good";
+            try
+            {
+                //connection.Open();
+                this.connect();
+                SqlCommand sqlcmd = new SqlCommand(query, connection);
+                //sqlcmd.Parameters.AddWithValue("@ID_Category", str.ID_Category);
+                sqlcmd.Parameters.AddWithValue("@id_Category", str.ID_Category);
+                sqlcmd.Parameters.AddWithValue("@Details", str.Details);
+                sqlcmd.ExecuteNonQuery();
+            }
+            catch (System.Data.SqlClient.SqlException ex)
+            {
+                msg += " Insert Error:";
+                msg += ex.Message;
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            return msg;
+        }
+        public string PostNEWEmployee(Employee str)
+        {
+            //string conn = ConfigurationManager.ConnectionStrings["MyConnection"].ConnectionString;
+            //SqlConnection connection = new SqlConnection(conn);
+            string query = "EXEC [dbo].[insertEmployee_Procedure] @ID_Employee,@Name,@LastName1,@LastName2,@Residence,@Nickname, @Secure_Pass,@BDate,@Phone,@Email,@Position,@Active,@BOffice_ID,@Role";
+            //DateTime bdate = Convert.ToDateTime(str.BDate);
+            string msg = "all good";
+            try
+            {
+                //connection.Open();
+                this.connect();
+                SqlCommand sqlcmd = new SqlCommand(query, connection);
+                sqlcmd.Parameters.AddWithValue("@ID_Employee", str.ID_Employee);
+                sqlcmd.Parameters.AddWithValue("@Name", str.Name);
+                sqlcmd.Parameters.AddWithValue("@LastName1", str.LastName1);
+                sqlcmd.Parameters.AddWithValue("@LastName2", str.LastName2);
+                sqlcmd.Parameters.AddWithValue("@Residence", str.Residence);
+                sqlcmd.Parameters.AddWithValue("@Nickname", str.Nickname);
+                sqlcmd.Parameters.AddWithValue("@Secure_Pass", str.Secure_Pass);
+                sqlcmd.Parameters.AddWithValue("@BDate", str.BDate);
+                sqlcmd.Parameters.AddWithValue("@Phone", str.Phone);
+                sqlcmd.Parameters.AddWithValue("@Email", str.Email);
+                sqlcmd.Parameters.AddWithValue("@Position", str.Position);
+                sqlcmd.Parameters.AddWithValue("@Active", str.Active);
+                sqlcmd.Parameters.AddWithValue("@BOffice_ID", str.BOffice_ID);
+                sqlcmd.Parameters.AddWithValue("@Role", str.Role);
+                sqlcmd.ExecuteNonQuery();
+            }
+            catch (System.Data.SqlClient.SqlException ex)
+            {
+                msg += " Insert Error:";
+                msg += ex.Message;
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            return msg;
+        }
+        public string PostNEWOrder(Order_Check str)
+        {
+            //string conn = ConfigurationManager.ConnectionStrings["MyConnection"].ConnectionString;
+            //SqlConnection connection = new SqlConnection(conn);
+            DateTime dtvar = Convert.ToDateTime(str.Date_Time);
+            string query = "EXEC [dbo].[insertOrderCheck_Procedure] @Date_Time,@OrderStatus,@Active,@Customer_ID,Employee_ID,@BOffice";
+
+            string msg = "all good";
+            try
+            {
+                //connection.Open();
+                this.connect();
+                SqlCommand sqlcmd = new SqlCommand(query, connection);
+                sqlcmd.Parameters.AddWithValue("@Customer_ID", str.Customer_ID);
+                sqlcmd.Parameters.AddWithValue("@Employee_ID", str.Employee_ID);
+                sqlcmd.Parameters.AddWithValue("@BOffice", str.BOffice);
+                sqlcmd.Parameters.AddWithValue("@Date_Time", dtvar);
+                sqlcmd.Parameters.AddWithValue("@OrderStatus", str.Order_Status);
+                sqlcmd.Parameters.AddWithValue("@Active", str.Active);
+
+                sqlcmd.ExecuteNonQuery();
+            }
+            catch (System.Data.SqlClient.SqlException ex)
+            {
+                msg += " Insert Error:";
+                msg += ex.Message;
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            return msg;
+        }
+        public string PostNEWProduct(Product str)
+        {
+            //string conn = ConfigurationManager.ConnectionStrings["MyConnection"].ConnectionString;
+            //SqlConnection connection = new SqlConnection(conn);
+            string query = "EXEC [dbo].[insertProduct_Procedure] @ID_Product,@Details,@Stock,@Price,@TaxFree,@ID_Supplier,@ID_Category,@Active,@Name,@BOffice";
+
+            string msg = "all good";
+            try
+            {
+                //connection.Open();
+                this.connect();
+                SqlCommand sqlcmd = new SqlCommand(query, connection);
+                sqlcmd.Parameters.AddWithValue("@ID_Product", str.ID_Product);
+                sqlcmd.Parameters.AddWithValue("@Name", str.Name);
+                sqlcmd.Parameters.AddWithValue("@Details", str.Details);
+                sqlcmd.Parameters.AddWithValue("@Stock", str.Stock);
+                sqlcmd.Parameters.AddWithValue("@Price", str.Price);
+                sqlcmd.Parameters.AddWithValue("@BOffice", str.BOffice);
+                sqlcmd.Parameters.AddWithValue("@TaxFree", str.TaxFree);
+                sqlcmd.Parameters.AddWithValue("@ID_Supplier", str.ID_Supplier);
+                sqlcmd.Parameters.AddWithValue("@ID_Category", str.ID_Category);
+                sqlcmd.Parameters.AddWithValue("@Active", str.Active);
 
 
+                sqlcmd.ExecuteNonQuery();
+            }
+            catch (System.Data.SqlClient.SqlException ex)
+            {
+                msg += " Insert Error:";
+                msg += ex.Message;
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            return msg;
+        }
+        public string PostNEWPurchase(Purchase_Item str)
+        {
+            //string conn = ConfigurationManager.ConnectionStrings["MyConnection"].ConnectionString;
+            //SqlConnection connection = new SqlConnection(conn);
+            string query = "EXEC [dbo].[insertPurchaseItem_Procedure] @Invoice_ID,@Quantity,@Price,@Product_ID";
+
+            string msg = "all good";
+            try
+            {
+                //connection.Open();
+                this.connect();
+                SqlCommand sqlcmd = new SqlCommand(query, connection);
+                //sqlcmd.Parameters.AddWithValue("@ID_Product", str.ID_Product);
+                sqlcmd.Parameters.AddWithValue("@Invoice_ID", str.Invoice_ID);
+                sqlcmd.Parameters.AddWithValue("@Quantity", str.Quantity);
+                sqlcmd.Parameters.AddWithValue("@Price", str.Price);
+                sqlcmd.Parameters.AddWithValue("@Product_ID", str.Product_ID);
+
+
+
+                sqlcmd.ExecuteNonQuery();
+            }
+            catch (System.Data.SqlClient.SqlException ex)
+            {
+                msg += " Insert Error:";
+                msg += ex.Message;
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            return msg;
+        }
+        public string PostNEWSupplier(Supplier str)
+        {
+            //string conn = ConfigurationManager.ConnectionStrings["MyConnection"].ConnectionString;
+            //SqlConnection connection = new SqlConnection(conn);
+            string query = "EXEC [dbo].[insertSupplier_Procedure] @ID_Supplier,@Active,@Name,@Country,@Phone";
+
+            string msg = "all good";
+            try
+            {
+                //connection.Open();
+                this.connect();
+
+                SqlCommand sqlcmd = new SqlCommand(query, connection);
+                //sqlcmd.Parameters.AddWithValue("@ID_Product", str.ID_Product);
+                sqlcmd.Parameters.AddWithValue("@ID_Supplier", str.ID_Supplier);
+                sqlcmd.Parameters.AddWithValue("@Active", str.Active);
+                sqlcmd.Parameters.AddWithValue("@Name", str.Name);
+                sqlcmd.Parameters.AddWithValue("@Country", str.Country);
+                sqlcmd.Parameters.AddWithValue("@Phone", str.Phone);
+
+
+
+                sqlcmd.ExecuteNonQuery();
+            }
+            catch (System.Data.SqlClient.SqlException ex)
+            {
+                msg += " Insert Error:";
+                msg += ex.Message;
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            return msg;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //Elimina un producto de la base de datos
         public string DeleteProduct(string id){
             string conn = ConfigurationManager.ConnectionStrings["MyConnection"].ConnectionString;
